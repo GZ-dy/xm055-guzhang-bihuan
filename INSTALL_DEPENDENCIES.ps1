@@ -163,7 +163,10 @@ if ($LASTEXITCODE -ne 0) { throw "Dependency verification failed." }
 
 Write-Host ""
 Write-Host "[DONE] Dependencies are ready in .venv." -ForegroundColor Green
+if (Test-Path -LiteralPath (Join-Path $Root "START_LOCAL_DEMO.cmd") -PathType Leaf) {
+    Write-Host "Next safe step: double-click START_LOCAL_DEMO.cmd to run the local validation." -ForegroundColor Green
+}
 if (Test-Path -LiteralPath (Join-Path $Root "NEW_PC_SETUP.bat") -PathType Leaf) {
-    Write-Host "Next: double-click NEW_PC_SETUP.bat to configure local credentials and bot autostart." -ForegroundColor Yellow
+    Write-Host "Production setup only: read docs\HANDOVER_OPERATIONS.md before NEW_PC_SETUP.bat." -ForegroundColor Yellow
 }
 if ($transcriptStarted) { Stop-Transcript | Out-Null }

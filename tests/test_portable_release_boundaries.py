@@ -57,6 +57,7 @@ class PortableReleaseBoundaryTests(unittest.TestCase):
             "INSTALL_DEPENDENCIES.bat",
             "NEW_PC_SETUP.ps1",
             "NEW_PC_SETUP.bat",
+            "START_LOCAL_DEMO.cmd",
             "ONE_CLICK_NEW_PC.bat",
             "RUN_KEEP_OPEN.cmd",
             "README_DEPENDENCIES.md",

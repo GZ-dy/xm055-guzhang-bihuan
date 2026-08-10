@@ -47,6 +47,23 @@ class DeliveryScriptsTests(unittest.TestCase):
         self.assertIn("one_click_new_pc.bat", launcher)
         self.assertTrue(launcher_path.read_bytes().isascii())
 
+    def test_safe_local_demo_launcher_never_enters_live_setup(self):
+        launcher_path = self.root / "START_LOCAL_DEMO.cmd"
+        launcher = launcher_path.read_text(encoding="ascii").lower()
+        self.assertIn("install_dependencies.ps1", launcher)
+        self.assertIn("validate_package.ps1", launcher)
+        self.assertIn("pause", launcher)
+        for forbidden in (
+            "new_pc_setup",
+            "install_wecom_bot_autostart",
+            "start_wecom_ai_bot_live",
+            "--apply",
+            "--send-mail",
+            "live-write",
+        ):
+            self.assertNotIn(forbidden, launcher)
+        self.assertTrue(launcher_path.read_bytes().isascii())
+
     def test_dependency_installer_bootstraps_python_and_wecom_runtime_only(self):
         script = (self.root / "INSTALL_DEPENDENCIES.ps1").read_text(encoding="utf-8-sig")
         self.assertIn("Python.Python.3.13", script)
@@ -63,6 +80,8 @@ class DeliveryScriptsTests(unittest.TestCase):
             self.assertNotIn(forbidden, script)
         self.assertIn("Start-Transcript", script)
         self.assertIn("dependency_install.log", script)
+        self.assertIn("START_LOCAL_DEMO.cmd", script)
+        self.assertIn("HANDOVER_OPERATIONS.md", script)
 
     def test_dependency_batch_keeps_errors_visible_and_checks_extraction(self):
         batch_path = self.root / "INSTALL_DEPENDENCIES.bat"

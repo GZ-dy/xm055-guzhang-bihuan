@@ -38,7 +38,7 @@ V1 便携包由 `tools/build_portable_release.ps1` 生成,默认入包(根目录
 - `install_env.ps1/.bat`、`validate_package.ps1/.bat`、`run_local_demo.ps1/.bat` 存在时自动入包
 - `start_wecom_ai_bot_dry_run.ps1/.bat`、`start_wecom_ai_bot_live.ps1`、`diagnose_bot.ps1`、`stop_bot.ps1` 存在时自动入包
 - `install_wecom_bot_autostart.ps1`、`setup_env.ps1`、`verify_env.ps1` 存在时自动入包，供接收方在新电脑重新配置机器人和 SMTP 凭据
-- `INSTALL_DEPENDENCIES.ps1/.bat`、`NEW_PC_SETUP.ps1/.bat`、`ONE_CLICK_NEW_PC.bat`、`RUN_KEEP_OPEN.cmd`、`README_DEPENDENCIES.md` 存在时自动入包，供新电脑完整解压后一键安装并启动
+- `INSTALL_DEPENDENCIES.ps1/.bat`、`START_LOCAL_DEMO.cmd`、`NEW_PC_SETUP.ps1/.bat`、`ONE_CLICK_NEW_PC.bat`、`RUN_KEEP_OPEN.cmd`、`README_DEPENDENCIES.md` 存在时自动入包；普通授权用户只用 `START_LOCAL_DEMO.cmd` 做本地安全体验，`ONE_CLICK_NEW_PC.bat` / `RUN_KEEP_OPEN.cmd` 仅供获批后的生产切换
 - `render_docx.py`(需要 LibreOffice/soffice 的视觉 QA 渲染模块)
 - `docs/CHANGELOG.md` 仓库内**应保留**(变更日志,新成员溯源用)
 - `PACKAGE_MANIFEST.txt` 由 build 脚本自动生成,不存仓库
@@ -143,6 +143,8 @@ python3 -B -m unittest discover -s tests -v
 (`install_env` / `validate_package` / `run_local_demo` 都是单个 power-shell + 单个 bat 双胞胎,跨平台共享同一逻辑。)
 
 Windows 依赖统一安装到项目根目录 `.venv/`；`validate_package` 和 `run_local_demo` 必须直接使用 `.venv\Scripts\python.exe`，不得回退到系统 Python。
+
+授权用户首次下载的默认安全入口是 `START_LOCAL_DEMO.cmd`：它只调用 `INSTALL_DEPENDENCIES.ps1` 和 `validate_package.ps1`。`RUN_KEEP_OPEN.cmd`、`ONE_CLICK_NEW_PC.bat`、`NEW_PC_SETUP.*` 会配置真实凭据、创建自启动并启动 live 机器人，禁止当作普通试用入口。
 
 ```powershell
 # 一键安装 Python 依赖(有网走 PyPI,无网走 wheelhouse/)

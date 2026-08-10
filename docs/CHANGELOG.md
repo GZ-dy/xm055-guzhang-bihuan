@@ -4,7 +4,7 @@
 
 ---
 
-## [Unreleased]
+## [0.2.0] - 2026-08-10
 
 ### 修复 (Fixes)
 - 邮件事件时间改为 `M月D日H点MM分`；OPENAPI 操作过程按运维口径补充“多域维护组”，故障原因段落首行缩进两字符。
@@ -26,6 +26,8 @@
 - 写 `requirements.txt`(从 src import 反推,含 openpyxl required + pytesseract/Pillow optional)。
 
 ### 新增 (Additions)
+- GitHub 私有 Release 交付流程：授权用户下载版本化 Windows ZIP 和 SHA-256 校验文件，不再以源码压缩包作为正式交付。
+- `START_LOCAL_DEMO.cmd`：只安装本地依赖并运行测试与离线 Demo，不配置凭据、不启动 live 机器人。
 - `docs/CHANGELOG.md` 本文件。
 - AGENTS.md 第 8 节"路径风格统一约定",为后续迁移到 Linux/Win 都打稳根。
 - 交付脚本集合：`install_env.ps1` / `install_env.bat`、`validate_package.ps1` / `validate_package.bat`、`run_local_demo.ps1` / `run_local_demo.bat`。

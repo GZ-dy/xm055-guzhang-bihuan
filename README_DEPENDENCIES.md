@@ -1,22 +1,26 @@
-# 故障闭环系统：新电脑一键启动包
+# 故障闭环系统：下载包使用说明
 
-这个 ZIP 不包含项目代码、故障数据、报告、测试数据、账号密钥或迁移文件。它会在已有工作区中自动安装依赖、完成本机配置、建立自启动任务并启动机器人。
+本 GitHub Release ZIP 已包含故障闭环系统代码、报告和台账模板、处置手册、Windows 安装脚本和本地验收脚本。它不包含真实飞书、企业微信或 SMTP 凭据，不包含旧电脑 DPAPI 文件、`.venv` 或历史运行数据。
 
-## 使用方法
+## 普通授权用户：本地安全体验
 
-1. 先确认新电脑上已经有“故障报告系统”工作区，根目录能看到 `run_closed_loop.py`。
-2. 把本 ZIP 内的全部文件解压到该工作区根目录。若提示覆盖两个 `requirements*.txt`，请选择覆盖。不要直接在 ZIP 预览窗口内双击 BAT。
-3. 确认旧电脑上的机器人已经停止，或者旧电脑已经关机。
-4. 只双击 `RUN_KEEP_OPEN.cmd`，保持联网并按窗口提示输入一次飞书、企业微信机器人和 SMTP 凭据，等待出现 `[DONE]`。该入口会强制保留黑色窗口，不需要手工修改任何配置文件。
+1. 完整解压 ZIP，不要在 ZIP 预览窗口内直接运行。
+2. 双击 `START_LOCAL_DEMO.cmd`。
+3. 等待依赖安装、测试和本地 Demo 完成。首次安装需要联网。
+4. 看到 `[DONE] Safe local demo passed.` 后，打开 `outputs` 目录查看 Word 报告、Excel 台账、手册匹配和邮件预览。
 
-安装器会自动完成：
+该入口不要求任何生产凭据，不连接企业微信、飞书或 SMTP，不创建自启动任务。安装失败时，窗口会保留，并在当前目录生成 `dependency_install.log`。
 
-- 电脑没有 Python 时，优先通过 Windows `winget` 安装 64 位 Python 3.13；LTSC 没有 `winget` 时自动从 Python 官方地址下载，并校验 SHA256 后静默安装；
-- 在当前工作区创建或修复 `.venv`；
-- 安装 Excel、Word 报告、图片处理和企业微信机器人所需 Python 依赖；
-- 验证所有关键模块可以导入；
-- 保存本机 Windows DPAPI 加密凭据、创建登录自启动任务并启动机器人。
+## 生产换机与机器人启用
 
-说明：常规文字机器人流程不需要 LibreOffice 或 Tesseract 桌面程序。只有要直接识别截图文字时，才需要另行安装 Tesseract OCR 及中文语言包。
+> [!WARNING]
+> `RUN_KEEP_OPEN.cmd`、`ONE_CLICK_NEW_PC.bat`、`NEW_PC_SETUP.*`、`install_wecom_bot_autostart.ps1` 和 `start_wecom_ai_bot_live.ps1` 不是普通试用入口。它们会收集或使用真实凭据、创建登录自启动任务并启动 live 机器人。
 
-安装失败时窗口会保留，并在工作区根目录生成 `dependency_install.log`，可直接发送该日志排查。旧电脑的 DPAPI 密文不能在新电脑解密，因此首次运行的一次凭据输入不能省略，包内不会保存明文密钥。
+只有在以下条件全部满足后，指定生产维护人员才可以按 `docs/HANDOVER_OPERATIONS.md` 执行 `RUN_KEEP_OPEN.cmd`：
+
+- 旧电脑机器人已停止且自启动已禁用；
+- 新电脑本地验收已通过；
+- 飞书目标表、邮件路由、企业微信 Bot 和单实例状态已核对；
+- 凭据由获授权人员在新电脑本地重新录入。
+
+旧电脑的 DPAPI 密文不能在新电脑解密，包内不会保存明文密钥。常规文字机器人流程不需要 LibreOffice 或 Tesseract 桌面程序；只有直接识别截图文字时，才需要另行安装 Tesseract OCR 和中文语言包。

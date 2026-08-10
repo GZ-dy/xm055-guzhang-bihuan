@@ -2,9 +2,78 @@
 
 > 面向 Windows 运维团队的本地故障收尾自动化工具：把一次已经处理过的用户报障整理为统一事实记录，并生成 Word 故障报告、Excel 台账、处置手册匹配和邮件预览；只有显式通过生产安全闸门后，才会写入飞书或发送正式邮件。
 
-`Windows 10/11` · `PowerShell 5.1+` · `Python 3.10+` · `CLI 默认纯本地 dry-run`
+`Windows 10/11 x64` · `PowerShell 5.1+` · `Python 3.10+` · `CLI 默认纯本地 dry-run`
 
-[5 分钟安全体验](#5-分钟安全体验) · [手动处理故障](#手动处理一条故障) · [生产安全闸门](#生产写入安全闸门) · [交接操作手册](docs/HANDOVER_OPERATIONS.md)
+[授权用户下载](#已获权限下载并安全试用) · [查看生成结果](#4-查看生成结果) · [手动处理故障](#手动处理一条故障) · [生产安全闸门](#生产写入安全闸门) · [交接操作手册](docs/HANDOVER_OPERATIONS.md)
+
+## 已获权限：下载并安全试用
+
+本私有仓库不只用于浏览源码。已获授权的同事不需要会 Git，也不需要预先安装 Python；下载已验收的 Windows 便携包后，可以直接安装本地依赖、运行安全 Demo，并查看生成的 Word 报告、Excel 台账、手册匹配和邮件预览。
+
+| 使用目的 | 下载后是否可用 | 入口 | 外部影响 |
+|---|---:|---|---|
+| 看效果、验收本地产物 | 是 | `START_LOCAL_DEMO.cmd` | 不连接业务系统 |
+| 用自己的故障文字生成本地产物 | 是 | `run_closed_loop.py --all-dry-run` | 不连接业务系统 |
+| 连接企业微信但保持业务 dry-run | 需本机凭据 | `start_wecom_ai_bot_dry_run.bat` | 会连接并回复企业微信 |
+| 正式写飞书、发邮件、设置自启动 | 不能直接启用 | 按交接手册执行 | 有生产写入 |
+
+### 1. 下载正式交付包
+
+1. 使用已被授权的 GitHub 账号登录；如刚收到邀请，先接受仓库邀请。
+2. 打开 [最新版本下载页](https://github.com/GZ-dy/duoyu-fault-closed-loop/releases/latest)。
+3. 在 **Assets** 中下载：
+   - `duoyu-fault-closed-loop-v0.2.0-windows-online.zip`
+   - `duoyu-fault-closed-loop-v0.2.0-windows-online.zip.sha256`
+
+> [!IMPORTANT]
+> 请下载 Assets 中以 `duoyu-fault-closed-loop-` 开头的 Windows 便携包。不要把 GitHub 自动生成的 `Source code (zip)` 或 `Source code (tar.gz)` 当作正式交付包。
+
+如果看不到 Release 或下载失败，先确认当前 GitHub 账号已获得本私有仓库的读取权限。请勿把下载地址或包转发给未授权人员。
+
+### 2. 校验并完整解压
+
+将 ZIP 和 `.sha256` 文件放在同一目录，在该目录打开 PowerShell，执行：
+
+```powershell
+$zip = ".\duoyu-fault-closed-loop-v0.2.0-windows-online.zip"
+$expected = ((Get-Content "$zip.sha256" -Raw).Trim() -split "\s+")[0]
+$actual = (Get-FileHash $zip -Algorithm SHA256).Hash
+if ($actual -ne $expected) { throw "SHA-256 校验失败，请重新下载" }
+"SHA-256 校验通过：$actual"
+```
+
+右键 ZIP 选择“全部解压”，建议解压到本地普通目录，例如 `%USERPROFILE%\duoyu-fault-closed-loop`。不要在 ZIP 预览窗口、网盘同步目录或网络共享目录中直接运行。
+
+### 3. 双击安全体验入口
+
+在解压后的根目录双击：
+
+```text
+START_LOCAL_DEMO.cmd
+```
+
+该入口会自动检查 Python 3.10+；没有 Python 时，安装器会优先用 `winget` 安装 Python 3.13 x64，失败时再从 Python 官方地址下载并校验安装包；随后在当前目录创建 `.venv`、安装依赖、运行当前测试集和本地 Demo。首次安装需要连网，但不会连接企业微信、飞书或 SMTP。
+
+看到以下结果即表示本地试用通过：
+
+```text
+[OK] offline demo validated with five artifact groups
+[OK] package validation passed
+[DONE] Safe local demo passed.
+```
+
+### 4. 查看生成结果
+
+| 生成内容 | 目录 |
+|---|---|
+| Word 故障报告 | `outputs\reports\portable_package_demo\` |
+| Excel 离线台账 | `outputs\ledger\portable_package_demo\` |
+| 邮件预览 | `outputs\mail\portable_package_demo\` |
+| 处置手册匹配 | `outputs\manuals\portable_package_demo\` |
+| 校验结果 | `outputs\validation\portable_package_demo\` |
+
+> [!WARNING]
+> 普通试用人员不要运行 `RUN_KEEP_OPEN.cmd`、`ONE_CLICK_NEW_PC.bat`、`NEW_PC_SETUP.bat/.ps1`、`install_wecom_bot_autostart.ps1` 或 `start_wecom_ai_bot_live.ps1`。这些文件只用于获批后的生产切换，会配置真实凭据、创建登录自启动任务并启动 live 机器人，可能写入飞书或发送正式邮件。正式启用必须按 [交接操作手册](docs/HANDOVER_OPERATIONS.md) 执行。
 
 ## 30 秒了解这个项目
 
@@ -62,17 +131,18 @@
 | 默认模式 | 纯本地 dry-run |
 | 外部集成 | 企业微信机器人、飞书多维表格、SMTP |
 | 验收标准 | 以当前 checkout 的 `validate_package.ps1` 和实际测试结果为准 |
+| 授权交付 | GitHub 私有 Releases 中的 Windows 便携包 + SHA-256 |
 
-## 获取项目与交付方式
+## 维护人员：获取源码与构建交付
 
-有仓库权限并已配置 Gitee SSH 时，维护人员可以获取源码工作区：
+只有需要修改代码或构建新交付包的维护人员才需要 Git。使用已授权的 GitHub 账号获取当前主分支：
 
 ```powershell
-git clone git@gitee.com:dangcafe/guzhangchulin.git
-cd guzhangchulin
+git clone https://github.com/GZ-dy/duoyu-fault-closed-loop.git
+cd duoyu-fault-closed-loop
 ```
 
-> Gitee 仓库是源码与维护工作区，不等同于可直接复制到新电脑运行的交付包。仓库快照中的 `.venv`、运行产物或本机加密文件都不能作为跨电脑部署依据。
+> 普通使用人员应从 Releases 下载已验收便携包，不要克隆仓库、不要自行构建，也不要使用 GitHub 自动生成的 Source code 压缩包作为正式交付。
 
 正式交付或换机时，应由已验收的维护机生成便携包：
 
@@ -80,11 +150,11 @@ cd guzhangchulin
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build_portable_release.ps1
 ```
 
-默认便携包不包含 `.venv`、真实飞书配置、企业微信/SMTP 凭据、历史运行数据和缓存。换机与人员交接都应以 [交接操作手册](docs/HANDOVER_OPERATIONS.md) 的“先停旧端、再启新端”顺序为准。
+默认便携包不包含 `.venv`、真实飞书配置、企业微信/SMTP 凭据、历史运行数据和缓存。构建后必须执行本地验收、敏感文件检查和 SHA-256 校验，再上传到 GitHub Release。换机与人员交接都应以 [交接操作手册](docs/HANDOVER_OPERATIONS.md) 的“先停旧端、再启新端”顺序为准。
 
-## 5 分钟安全体验
+## 命令行方式：5 分钟安全体验
 
-下面的流程只生成本地产物，不连接飞书、不发送邮件，也不启动正式企业微信机器人。请在完整解压的默认便携包中执行；如果使用已有工作区，必须确认 `.venv` 是在当前电脑上创建的有效环境。
+已通过 `START_LOCAL_DEMO.cmd` 完成试用的人员可跳过本节。下面是给熟悉 PowerShell 的维护人员使用的等价命令行流程；它只生成本地产物，不连接飞书、不发送邮件，也不启动正式企业微信机器人。
 
 ### 1. 准备项目环境
 
@@ -95,6 +165,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build_portable_r
 ```
 
 脚本使用项目根目录的 `.venv`，并安装 `requirements.txt` 和 `requirements-wecom.txt` 中声明的依赖。如果目录中已有从其他电脑复制来的 `.venv`，不要直接复用；应按交接文档在当前电脑重建环境。
+
+电脑没有 Python 时，改用：
+
+```powershell
+.\INSTALL_DEPENDENCIES.bat
+```
 
 ### 2. 运行离线 Demo
 
