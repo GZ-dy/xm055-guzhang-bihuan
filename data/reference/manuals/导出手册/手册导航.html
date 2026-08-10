@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>故障处理手册导航</title>
+  <style>
+    :root {
+      --bg-top: #f8f1e4;
+      --bg-bottom: #eef3f7;
+      --card: rgba(255, 255, 255, 0.92);
+      --ink: #203040;
+      --muted: #607080;
+      --line: rgba(70, 93, 114, 0.14);
+      --accent: #ac5a2a;
+      --accent-soft: #f6e4d7;
+      --chip: #e7edf3;
+      --shadow: 0 20px 50px rgba(38, 60, 78, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(172, 90, 42, 0.18), transparent 22%),
+        radial-gradient(circle at top right, rgba(64, 124, 173, 0.12), transparent 22%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+    .page {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 34px 20px 48px;
+    }
+    .hero {
+      padding: 28px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 34px;
+    }
+    .hero p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .stat {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--chip);
+      font-size: 13px;
+      color: #385068;
+      font-weight: 600;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) repeat(2, minmax(160px, 0.6fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .toolbar input,
+    .toolbar select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      font-size: 15px;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+    .results {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+    .guide-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .guide-card h2 {
+      margin: 8px 0 6px;
+      font-size: 22px;
+      line-height: 1.3;
+    }
+    .fault-pattern {
+      margin: 0;
+      color: #32465a;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .count-chip {
+      flex-shrink: 0;
+      align-self: flex-start;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: var(--accent-soft);
+      color: #7c3f1f;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0;
+    }
+    .meta-grid dt {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-grid dd {
+      margin: 0;
+      font-size: 14px;
+      color: var(--ink);
+      word-break: break-all;
+    }
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .card-actions a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #27445c;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid rgba(39, 68, 92, 0.08);
+    }
+    .empty {
+      display: none;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed var(--line);
+      color: var(--muted);
+    }
+    @media (max-width: 860px) {
+      .toolbar { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>故障处理手册导航</h1>
+      <p>推荐日常值班优先使用这个页面查找手册。支持按系统名、故障模式、分类、域快速筛选，并可一键打开 HTML、DOCX 或原始 Markdown。</p>
+      <div class="stats">
+        <div class="stat">系统数量：19</div>
+        <div class="stat">已发布手册：16</div>
+        <div class="stat">导出格式：HTML + DOCX + Markdown</div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input id="keyword" type="search" placeholder="输入系统名、故障模式、分类关键字，例如 OPENAPI / 数据库网络 / 线程池" />
+      <select id="domain">
+        <option value="">全部域</option>
+        <option value="B域">B域</option><option value="M域">M域</option><option value="经分域">经分域</option>
+      </select>
+      <select id="classification">
+        <option value="">全部分类</option>
+        <option value="主机">主机</option><option value="其他">其他</option><option value="应用">应用</option><option value="数据库">数据库</option><option value="网络">网络</option>
+      </select>
+    </section>
+
+    <p id="resultCount" class="results"></p>
+    <section id="cardGrid" class="grid">
+
+        <article class="guide-card" data-domain="经分域" data-classification="应用" data-search="自助分析 经分域 后台任务进程卡住 应用 后台跑数任务夯死无法操作 重启后台程序">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 应用</div>
+              <h2>自助分析</h2>
+              <p class="fault-pattern">后台任务进程卡住</p>
+            </div>
+            <div class="count-chip">10 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-05-06</dd></div>
+            <div><dt>原始手册</dt><dd>自助分析-后台任务进程卡住.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/自助分析/自助分析-后台任务进程卡住.html">HTML</a>
+            <a href="docx/经分域/自助分析/自助分析-后台任务进程卡住.docx">DOCX</a>
+            <a href="../处理手册/经分域/自助分析/自助分析-后台任务进程卡住.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="数据库" data-search="openapi 经分域 数据库服务器网络服务异常 数据库 openapi页面无法访问 数据库组处理">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 数据库</div>
+              <h2>OPENAPI</h2>
+              <p class="fault-pattern">数据库服务器网络服务异常</p>
+            </div>
+            <div class="count-chip">6 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-04-30</dd></div>
+            <div><dt>原始手册</dt><dd>OPENAPI-数据库服务器网络服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/OPENAPI/OPENAPI-数据库服务器网络服务异常.html">HTML</a>
+            <a href="docx/经分域/OPENAPI/OPENAPI-数据库服务器网络服务异常.docx">DOCX</a>
+            <a href="../处理手册/经分域/OPENAPI/OPENAPI-数据库服务器网络服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="应用" data-search="bomc b域 线程池满 应用 bomc页面无法打开 重启cas服务 重启cas和web服务">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 应用</div>
+              <h2>BOMC</h2>
+              <p class="fault-pattern">线程池满</p>
+            </div>
+            <div class="count-chip">5 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-04-13</dd></div>
+            <div><dt>原始手册</dt><dd>BOMC-线程池满.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/BOMC/BOMC-线程池满.html">HTML</a>
+            <a href="docx/B域/BOMC/BOMC-线程池满.docx">DOCX</a>
+            <a href="../处理手册/B域/BOMC/BOMC-线程池满.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="数据库" data-search="it工单系统 b域 数据库服务器网络服务异常 数据库 2026年6月20日10:13分，it工单系统出现数据库服务宕机，系统不可用。 2026年6月20日11:13分，it工单系统数据库服务宕机，系统页面无法正常访问，工单流程中断。故障导致所有依赖it工单系统的业务工单无法创建、流转和处理，影响范围覆盖全部在用it工单模块。 2026年6月20日12:13分，it工单系统再次出现数据库服务宕机，系统无法正常提供服务。此次为同日第三次数据库服务中断，前两次分别发生于当日10:13至10:59和11:13至12:59。故障影响范围包括it工单系统的创建、流转、查询等全部业务功能。 重启数据库主机服务，恢复数据库实例运行 卓望维护组重启数据库主机服务 重启数据库主机服务">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 数据库</div>
+              <h2>IT工单系统</h2>
+              <p class="fault-pattern">数据库服务器网络服务异常</p>
+            </div>
+            <div class="count-chip">4 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-06-20</dd></div>
+            <div><dt>原始手册</dt><dd>IT工单系统-数据库服务器网络服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/IT工单系统/IT工单系统-数据库服务器网络服务异常.html">HTML</a>
+            <a href="docx/B域/IT工单系统/IT工单系统-数据库服务器网络服务异常.docx">DOCX</a>
+            <a href="../处理手册/B域/IT工单系统/IT工单系统-数据库服务器网络服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="主机" data-search="openapi 经分域 主机软死锁 主机 主机出现软死锁 2026年6月18日13:20，openapi系统主机再次出现软死锁现象，系统页面无法访问，api接口调用全部超时无响应，所有依赖openapi接口的上游业务系统数据查询功能中断。本次故障与当日11:20分发生的故障属同类型问题，均为主机软死锁导致。服务台接到用户反馈后上报多域维护组，经排查确认主机软死锁，通知卓望团队协助重启主机恢复服务。 重启主机 通知卓望团队重启主机">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 主机</div>
+              <h2>OPENAPI</h2>
+              <p class="fault-pattern">主机软死锁</p>
+            </div>
+            <div class="count-chip">3 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-06-18</dd></div>
+            <div><dt>原始手册</dt><dd>OPENAPI-主机软死锁.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/OPENAPI/OPENAPI-主机软死锁.html">HTML</a>
+            <a href="docx/经分域/OPENAPI/OPENAPI-主机软死锁.docx">DOCX</a>
+            <a href="../处理手册/经分域/OPENAPI/OPENAPI-主机软死锁.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="M域" data-classification="数据库" data-search="数字员工 m域 redis内存溢出 数据库 智能小7打开异常 移动办公机器人响应返回值异常null 调整redis内存空间 清理redis过期缓存token腾出内存空间">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">M域 · 数据库</div>
+              <h2>数字员工</h2>
+              <p class="fault-pattern">redis内存溢出</p>
+            </div>
+            <div class="count-chip">3 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-03-17</dd></div>
+            <div><dt>原始手册</dt><dd>数字员工-redis内存溢出.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/M域/数字员工/数字员工-redis内存溢出.html">HTML</a>
+            <a href="docx/M域/数字员工/数字员工-redis内存溢出.docx">DOCX</a>
+            <a href="../处理手册/M域/数字员工/数字员工-redis内存溢出.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="应用" data-search="bomc b域 cas服务异常 应用 2026年6月19日15:13，bomc系统cas服务出现夯死现象，cas服务进程无响应，web服务关联异常，用户无法正常登录bomc系统，监控告警页面无法访问，影响运维人员对全网设备的监控和告警处理。经分析，本次故障由代码问题导致cas服务高频故障引发。 2026年6月20日10:13分，bomc系统cas服务夯死，系统不可用。 重启cas和web服务 重启服务">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 应用</div>
+              <h2>BOMC</h2>
+              <p class="fault-pattern">cas服务异常</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-06-20</dd></div>
+            <div><dt>原始手册</dt><dd>BOMC-cas服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/BOMC/BOMC-cas服务异常.html">HTML</a>
+            <a href="docx/B域/BOMC/BOMC-cas服务异常.docx">DOCX</a>
+            <a href="../处理手册/B域/BOMC/BOMC-cas服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="应用" data-search="it工单系统 b域 itsm服务异常 应用 it工单页面无法打开 重启itsm模块">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 应用</div>
+              <h2>IT工单系统</h2>
+              <p class="fault-pattern">itsm服务异常</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-01-07</dd></div>
+            <div><dt>原始手册</dt><dd>IT工单系统-itsm服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/IT工单系统/IT工单系统-itsm服务异常.html">HTML</a>
+            <a href="docx/B域/IT工单系统/IT工单系统-itsm服务异常.docx">DOCX</a>
+            <a href="../处理手册/B域/IT工单系统/IT工单系统-itsm服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="其他" data-search="smartbi 经分域 线程池满 其他 smartbi系统卡顿 smartbi无法登录 重启后台程序">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 其他</div>
+              <h2>SmartBI</h2>
+              <p class="fault-pattern">线程池满</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-03-27</dd></div>
+            <div><dt>原始手册</dt><dd>SmartBI-线程池满.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/SmartBI/SmartBI-线程池满.html">HTML</a>
+            <a href="docx/经分域/SmartBI/SmartBI-线程池满.docx">DOCX</a>
+            <a href="../处理手册/经分域/SmartBI/SmartBI-线程池满.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="应用" data-search="下载中心 经分域 文件扫描程序卡死 应用 扫描程序未完成运行 重启扫描 程序">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 应用</div>
+              <h2>下载中心</h2>
+              <p class="fault-pattern">文件扫描程序卡死</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-06-03</dd></div>
+            <div><dt>原始手册</dt><dd>下载中心-文件扫描程序卡死.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/下载中心/下载中心-文件扫描程序卡死.html">HTML</a>
+            <a href="docx/经分域/下载中心/下载中心-文件扫描程序卡死.docx">DOCX</a>
+            <a href="../处理手册/经分域/下载中心/下载中心-文件扫描程序卡死.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="其他" data-search="大数据平台k8s集群 b域 主机内存故障 其他">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 其他</div>
+              <h2>大数据平台K8S集群</h2>
+              <p class="fault-pattern">主机内存故障</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-06-02</dd></div>
+            <div><dt>原始手册</dt><dd>大数据平台K8S集群-主机内存故障.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/大数据平台K8S集群/大数据平台K8S集群-主机内存故障.html">HTML</a>
+            <a href="docx/B域/大数据平台K8S集群/大数据平台K8S集群-主机内存故障.docx">DOCX</a>
+            <a href="../处理手册/B域/大数据平台K8S集群/大数据平台K8S集群-主机内存故障.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="其他" data-search="实时营销 经分域 tomcat服务异常 其他 后台日志大量报错 tomcat服务频繁掉线 重启tomcat服务 删除文件释放内存空间">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 其他</div>
+              <h2>实时营销</h2>
+              <p class="fault-pattern">Tomcat服务异常</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-05-06</dd></div>
+            <div><dt>原始手册</dt><dd>实时营销-Tomcat服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/实时营销/实时营销-Tomcat服务异常.html">HTML</a>
+            <a href="docx/经分域/实时营销/实时营销-Tomcat服务异常.docx">DOCX</a>
+            <a href="../处理手册/经分域/实时营销/实时营销-Tomcat服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="数据库" data-search="实时营销 经分域 端口服务异常 数据库 端口连接数异常 重启redis,storm服务 重启redis服务">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 数据库</div>
+              <h2>实时营销</h2>
+              <p class="fault-pattern">端口服务异常</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-01-29</dd></div>
+            <div><dt>原始手册</dt><dd>实时营销-端口服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/实时营销/实时营销-端口服务异常.html">HTML</a>
+            <a href="docx/经分域/实时营销/实时营销-端口服务异常.docx">DOCX</a>
+            <a href="../处理手册/经分域/实时营销/实时营销-端口服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="M域" data-classification="其他" data-search="数字员工 m域 接口服务异常 其他 智能小7打开异常 智能小7提报障单异常 重启snc-digital-employee模块后恢复 重启snc-im-chat模块后恢复">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">M域 · 其他</div>
+              <h2>数字员工</h2>
+              <p class="fault-pattern">接口服务异常</p>
+            </div>
+            <div class="count-chip">2 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-03-13</dd></div>
+            <div><dt>原始手册</dt><dd>数字员工-接口服务异常.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/M域/数字员工/数字员工-接口服务异常.html">HTML</a>
+            <a href="docx/M域/数字员工/数字员工-接口服务异常.docx">DOCX</a>
+            <a href="../处理手册/M域/数字员工/数字员工-接口服务异常.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="B域" data-classification="网络" data-search="bomc b域 30443端口冲突与公共模块无法连接 网络">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">B域 · 网络</div>
+              <h2>BOMC</h2>
+              <p class="fault-pattern">30443端口冲突与公共模块无法连接</p>
+            </div>
+            <div class="count-chip">1 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-01-17</dd></div>
+            <div><dt>原始手册</dt><dd>BOMC-30443端口冲突与公共模块无法连接.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/B域/BOMC/BOMC-30443端口冲突与公共模块无法连接.html">HTML</a>
+            <a href="docx/B域/BOMC/BOMC-30443端口冲突与公共模块无法连接.docx">DOCX</a>
+            <a href="../处理手册/B域/BOMC/BOMC-30443端口冲突与公共模块无法连接.md">Markdown</a>
+          </div>
+        </article>
+
+        <article class="guide-card" data-domain="经分域" data-classification="应用" data-search="下载中心 经分域 用户同步程序卡死 应用">
+          <div class="card-top">
+            <div>
+              <div class="eyebrow">经分域 · 应用</div>
+              <h2>下载中心</h2>
+              <p class="fault-pattern">用户同步程序卡死</p>
+            </div>
+            <div class="count-chip">1 次</div>
+          </div>
+          <dl class="meta-grid">
+            <div><dt>最近发生</dt><dd>2026-05-11</dd></div>
+            <div><dt>原始手册</dt><dd>下载中心-用户同步程序卡死.md</dd></div>
+          </dl>
+          <div class="card-actions">
+            <a href="html/经分域/下载中心/下载中心-用户同步程序卡死.html">HTML</a>
+            <a href="docx/经分域/下载中心/下载中心-用户同步程序卡死.docx">DOCX</a>
+            <a href="../处理手册/经分域/下载中心/下载中心-用户同步程序卡死.md">Markdown</a>
+          </div>
+        </article>
+
+    </section>
+    <p id="emptyState" class="empty">没有匹配到手册，可以换个系统名、故障模式或分类关键字再试试。</p>
+  </main>
+
+  <script>
+    const keywordInput = document.getElementById("keyword");
+    const domainSelect = document.getElementById("domain");
+    const classificationSelect = document.getElementById("classification");
+    const cards = Array.from(document.querySelectorAll(".guide-card"));
+    const resultCount = document.getElementById("resultCount");
+    const emptyState = document.getElementById("emptyState");
+
+    function applyFilters() {
+      const keyword = keywordInput.value.trim().toLowerCase();
+      const domain = domainSelect.value;
+      const classification = classificationSelect.value;
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const matchKeyword = !keyword || card.dataset.search.includes(keyword);
+        const matchDomain = !domain || card.dataset.domain === domain;
+        const matchClassification = !classification || card.dataset.classification === classification;
+        const visible = matchKeyword && matchDomain && matchClassification;
+        card.style.display = visible ? "" : "none";
+        if (visible) visibleCount += 1;
+      });
+
+      resultCount.textContent = `当前显示 ${visibleCount} 篇手册`;
+      emptyState.style.display = visibleCount ? "none" : "block";
+    }
+
+    keywordInput.addEventListener("input", applyFilters);
+    domainSelect.addEventListener("change", applyFilters);
+    classificationSelect.addEventListener("change", applyFilters);
+    applyFilters();
+  </script>
+</body>
+</html>

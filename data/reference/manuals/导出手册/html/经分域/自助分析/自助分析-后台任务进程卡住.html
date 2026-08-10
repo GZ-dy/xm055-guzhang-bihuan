@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自助分析 - 后台任务进程卡住 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>自助分析 - 后台任务进程卡住 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/自助分析/自助分析-后台任务进程卡住.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/自助分析/自助分析-后台任务进程卡住.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#执行跑数服务自动化预案">执行跑数服务自动化预案</a><a class="nav-link nav-level-3" href="#确认跑数任务是否推进">确认跑数任务是否推进</a><a class="nav-link nav-level-3" href="#补充检查后台任务进程">补充检查后台任务进程</a><a class="nav-link nav-level-3" href="#保留主机资源现场">保留主机资源现场</a><a class="nav-link nav-level-3" href="#按任务-id-回查日志">按任务 ID 回查日志</a><a class="nav-link nav-level-3" href="#检查数据库锁等待">检查数据库锁等待</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>自助分析 - 后台任务进程卡住 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 应用 | <strong>所属域</strong>: 经分域 | <strong>首次发生</strong>: 2026-03-19 | <strong>累计次数</strong>: 10次</p><p><strong>最后更新</strong>: 2026-05-06 | <strong>数据来源</strong>: 多域系统故障记录表</p><p><strong>适用场景</strong>: 后台跑数任务卡住 / 任务队列不推进 / 页面可访问但结果不返回</p><p><strong>处置目标</strong>: 通过 BOMC 自动化预案重启自助分析跑数服务，恢复任务推进，并同步验证前端、DTS、DB2 与日志链路</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/self_analysis_network_topology_marked.png" alt="自助分析后台任务进程卡住故障处理部署图" /><figcaption>自助分析后台任务进程卡住故障处理部署图</figcaption></figure><p>图中标注对象为 自助分析 在 后台任务进程卡住 场景下的主处理对象和恢复验证对象。处置时先确认主故障点，再扩展到依赖链路和业务验证，避免只根据单个告警对象做局部处理。</p><p>关键对象：</p><ul><li>BOMC 自动化预案：自助分析跑数服务重启的主恢复入口。</li><li>10.253.43.59：后台任务处理机，预案失败或厂商要求时再做主机侧补充检查。</li><li>qt_master / qt_support / qt_socket*：后台任务调度与队列处理进程，不作为默认手工重启入口。</li><li>10.252.157.203 / 10.252.157.202：前端主备，恢复后验证页面与任务提交。</li><li>10.253.88.173 / 10.252.149.1：DTS 报表与 DB2 依赖，恢复后做联动验证。</li></ul><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>10.253.43.59 后台任务进程组不推进</td><td>先保留日志和进程现场，再执行自动化预案或恢复后台任务</td><td><code>qt_master</code>、<code>qt_support</code>、<code>qt_socket1</code>、<code>qt_socket2</code>、<code>qt_socket3</code></td></tr><tr><td>蓝框</td><td>前端主备、DTS、DB2 和日志结果</td><td>恢复后验证任务推进、页面状态和数据库回写</td><td>依赖侧只在确认异常时恢复</td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li>后台跑数任务夯死无法操作</li><li>后台跑数任务长时间停留在执行中，页面可访问但结果不返回。</li><li>页面可访问但跑数任务长时间停留在执行中，需通过 BOMC 自动化预案重启跑数服务。</li><li>同日连续复发时，升级调度进程、代码逻辑或依赖链路专项排查。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>单个任务长时间执行中</td><td>记录任务 ID 并确认是否需要执行跑数服务预案</td><td>优先按单任务卡死处理</td></tr><tr><td>多批任务均不推进</td><td>在 BOMC 自动化预案中执行跑数服务重启</td><td>按调度进程整体异常处理</td></tr><tr><td>恢复后旧任务仍卡住</td><td>验证历史任务和新任务</td><td>不能按页面可访问直接结项</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>记录任务 ID、任务类型、提交时间、故障发现时间和影响入口。</li><li>登录 BOMC 页面，进入自动化预案，选择自助分析跑数服务重启预案。</li><li>执行预案并保存返回结果，记录预案开始时间、结束时间和执行状态。</li><li>回查自助分析页面、历史卡住任务和新提交任务是否恢复推进。</li><li>只有预案执行失败、返回异常或厂商要求时，才登录 10.253.43.59 补充检查进程、资源和日志。</li><li>恢复后同时验证历史任务、新任务、前端、DTS、DB2 和日志链路。</li></ol><h2 id="关键检查命令">关键检查命令</h2><p>以下命令已按本故障场景去重整理；每条命令先说明用途，执行前按实际主机、路径、权限和变更流程确认。</p><h3 id="执行跑数服务自动化预案">执行跑数服务自动化预案</h3><p>跑数服务恢复通过 BOMC 自动化预案执行，不默认登录主机手工重启；执行完成后保存预案返回结果。</p><div class="code-block"><div class="code-lang">text</div><pre><code>BOMC页面 -&gt; 自动化预案 -&gt; 搜索 自助分析跑数服务 -&gt; 执行重启预案 -&gt; 保存执行结果</code></pre></div><h3 id="确认跑数任务是否推进">确认跑数任务是否推进</h3><p>用于恢复后确认历史卡住任务继续推进，并验证新提交任务可以正常完成。</p><div class="code-block"><div class="code-lang">text</div><pre><code>登录自助分析页面 -&gt; 查看历史卡住任务状态 -&gt; 新提交一笔验证任务 -&gt; 记录任务结果和耗时</code></pre></div><h3 id="补充检查后台任务进程">补充检查后台任务进程</h3><p>只有 BOMC 自动化预案执行失败、返回异常或厂商要求时再登录 10.253.43.59，确认 qt_master / qt_support / qt_socket 是否仍假活。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep -Ei &quot;qt_master|qt_support|qt_socket&quot; | grep -v grep</code></pre></div><h3 id="保留主机资源现场">保留主机资源现场</h3><p>用于预案失败后的补充判断，确认是否存在 CPU、内存、IO 或系统资源异常。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>top -b -n 1 | head -n 30
+free -h
+df -h</code></pre></div><h3 id="按任务-id-回查日志">按任务 ID 回查日志</h3><p>用于定位具体卡住任务、队列阻塞点、重复重试或依赖超时，&lt;task_id&gt; 按现场替换。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>grep -Ei &quot;&lt;task_id&gt;|qt_master|qt_support|qt_socket|timeout|deadlock|queue&quot; &lt;自助分析日志目录&gt;/*.log | tail -n 120</code></pre></div><h3 id="检查数据库锁等待">检查数据库锁等待</h3><p>任务恢复后仍无法完成时由 DBA 执行，重点确认任务状态回写、锁等待和慢 SQL。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>db2 connect to &lt;db_name&gt;
+db2 list applications
+db2pd -db &lt;db_name&gt; -locks</code></pre></div><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><section class="meta-card"><p>自助分析 出现 后台任务进程卡住，当前已按手册确认故障对象为 BOMC 自动化预案。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成页面、接口、任务和监控恢复验证。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、现场操作、恢复验证</td><td>执行标准处置流程并记录结果</td></tr><tr><td>系统维护 / 厂商</td><td>应用服务、脚本、配置和程序逻辑</td><td>恢复服务并定位反复故障根因</td></tr><tr><td>DBA / 平台支撑</td><td>数据库、中间件、主机和网络依赖</td><td>在扩展验证异常时介入处理</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>完成恢复动作后，按以下顺序验证：</p><ol><li>BOMC 自动化预案执行成功并有明确返回结果。</li><li>历史卡住任务继续推进并产生成功或明确失败结果。</li><li>新提交任务可以正常完成，不再停留在执行中。</li><li>前端主备、DTS、DB2 和日志链路无持续异常。</li><li>同类任务未在短时间内再次卡死。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li>直接根因：后台任务进程组不推进，导致跑数任务长期停留在执行中。</li><li>应用表现：页面可访问但任务结果不返回，历史任务或新任务持续堆积。</li><li>处置边界：恢复动作通过 BOMC 自动化预案执行，不优先登录 10.253.43.59 手工重启后台进程组。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>监控调度心跳、任务堆积、最长执行时长和失败重试次数。</li><li>定期验证 BOMC 自动化预案可用性、返回值和失败告警。</li><li>同日多次复发时升级下游依赖和代码路径专项分析。</li></ul><h2 id="历史案例">历史案例</h2><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>19</td><td>2026-03-19 10:22</td><td>后台跑数任务夯死无法操作</td><td>BOMC 自动化预案重启跑数服务</td><td>后台跑数任务卡住</td><td>8min</td></tr><tr><td>53</td><td>2026-05-06 11:45</td><td>后台跑数任务夯死无法操作</td><td>BOMC 自动化预案重启跑数服务</td><td>后台跑数任务卡住</td><td>2min</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

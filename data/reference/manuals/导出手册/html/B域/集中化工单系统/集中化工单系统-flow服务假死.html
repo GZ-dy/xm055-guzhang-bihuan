@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>集中化工单系统 - flow服务假死 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>集中化工单系统 - flow服务假死 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/B域/IT工单系统/集中化工单系统-flow服务假死.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/B域/IT工单系统/集中化工单系统-flow服务假死.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#查看相关进程">查看相关进程</a><a class="nav-link nav-level-3" href="#查看服务状态">查看服务状态</a><a class="nav-link nav-level-3" href="#查看最近日志">查看最近日志</a><a class="nav-link nav-level-3" href="#查看监听端口">查看监听端口</a><a class="nav-link nav-level-3" href="#检查线程-cpu热点">检查线程/CPU热点</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article>
+<h1>集中化工单系统 - flow服务假死 故障处置手册</h1>
+
+<blockquote>**故障分类**: 应用 | **所属域**: B域 | **首次发生**: 2026-07-09 | **累计次数**: 5次</blockquote>
+<blockquote></blockquote>
+<blockquote>**最后更新**: 2026-07-09 | **数据来源**: 多域系统故障记录表 + 现场排障</blockquote>
+<blockquote></blockquote>
+<blockquote>**适用场景**: 集中化工单系统登录异常 / flow 服务假死 / pod 启动后服务实例未就绪</blockquote>
+<blockquote></blockquote>
+<blockquote>**处置目标**: 确认 flow 服务假死主因，恢复登录与业务入口，固化探针与监控。</blockquote>
+
+<h2>故障拓扑</h2>
+
+<blockquote>本系统尚未在 `data/reference/manuals/assets/` 下沉淀专用拓扑图；后续可在现场补充。</blockquote>
+
+<p>关键对象：</p>
+
+<ul>
+<li>flow 服务（Pod 化部署，多实例）</li>
+<li>pod 启动后的服务实例就绪状态</li>
+<li>健康检查机制（存活探针 / 就绪探针）</li>
+</ul>
+
+<h2>故障点标注与恢复对象</h2>
+
+<tr><td>标注</td><td>故障点/现象</td><td>优先恢复动作</td><td>需要重启/执行的对象</td></tr>
+<tr><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>红框</td><td>flow 服务假死，pod 启动后服务实例未就绪</td><td>修改 pod 健康检查机制（存活/就绪探针）</td><td>flow pod（建议逐实例滚动）</td></tr>
+<tr><td>扩展</td><td>多实例同时未就绪导致用户无法登录</td><td>检查镜像、配置和启动顺序</td><td>flow 全部 pod、依赖服务</td></tr>
+
+<h2>适用范围与故障判定</h2>
+
+<h3>适用范围</h3>
+
+<p>遇到以下任一现象，进入本手册流程处理：</p>
+
+<ul>
+<li>集中化工单系统无法登录或登录异常。</li>
+<li>flow 服务假死，进程在但请求无响应或超时。</li>
+<li>pod 启动后服务实例长期未就绪（readiness probe 持续失败）。</li>
+<li>多实例同时未就绪导致所有用户无法登录。</li>
+</ul>
+
+<h3>判定规则</h3>
+
+<tr><td>如果看到</td><td>先做什么</td><td>判断结论</td></tr>
+<tr><td>----------</td><td>----------</td><td>----------</td></tr>
+<tr><td>用户报障无法登录</td><td>抓取 flow pod 状态与日志</td><td>收敛到 flow 服务侧</td></tr>
+<tr><td>pod Running 但 readiness 失败</td><td>检查探针配置和启动依赖</td><td>服务假活，先恢复探针</td></tr>
+<tr><td>恢复后仍有登录失败</td><td>回查页面、接口、日志和监控</td><td>确认假恢复或依赖未恢复</td></tr>
+
+<h2>标准处置流程</h2>
+
+<ul>
+<li>记录故障时间、登录现象、影响入口和受影响实例数。</li>
+<li>抓取 flow pod 列表和状态：</li>
+</ul>
+<p>```bash</p>
+<p>kubectl -n <ns> get pod -l app=flow -o wide</p>
+<p>```</p>
+<ul>
+<li>抓取未就绪实例的就绪探针日志和事件：</li>
+</ul>
+<p>```bash</p>
+<p>kubectl -n <ns> describe pod <pod></p>
+<p>kubectl -n <ns> logs <pod> --previous --tail=300</p>
+<p>```</p>
+<ul>
+<li>确认旧实例已隔离或标记不接流量后，修改 pod 健康检查机制（存活/就绪探针），滚动重启。</li>
+<li>重启后验证用户登录和集中化工单系统核心入口。</li>
+<li>恢复后保留现场（探针配置 diff、pod 事件、关键日志），便于根因回溯。</li>
+<li>短时间复发时升级开发定位根因，并补充进程级和就绪级监控。</li>
+</ul>
+
+<h2>关键检查命令</h2>
+
+<blockquote>以下命令按本故障场景去重整理；执行前按实际命名空间、标签和权限确认。</blockquote>
+
+<h3>列出 flow pod 状态</h3>
+
+<pre><code>
+kubectl -n &lt;ns&gt; get pod -l app=flow -o wide
+</code></pre>
+
+<h3>查看未就绪 pod 详情</h3>
+
+<pre><code>
+kubectl -n &lt;ns&gt; describe pod &lt;pod&gt;
+</code></pre>
+
+<h3>抓取 flow 最近日志</h3>
+
+<pre><code>
+kubectl -n &lt;ns&gt; logs -l app=flow --tail=300 --since=30m
+</code></pre>
+
+<h3>查看 readiness/liveness 探针配置</h3>
+
+<pre><code>
+kubectl -n &lt;ns&gt; get pod &lt;pod&gt; -o jsonpath='{.spec.containers[*].livenessProbe}'
+kubectl -n &lt;ns&gt; get pod &lt;pod&gt; -o jsonpath='{.spec.containers[*].readinessProbe}'
+</code></pre>
+
+<h3>滚动重启 flow</h3>
+
+<pre><code>
+kubectl -n &lt;ns&gt; rollout restart deployment/flow
+kubectl -n &lt;ns&gt; rollout status deployment/flow
+</code></pre>
+
+<h2>协同分工与通知口径</h2>
+
+<h3>通知口径</h3>
+
+<blockquote>集中化工单系统出现 flow 服务假死，当前已按手册确认主故障对象为 flow pod 健康检查机制。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成登录、业务入口和监控恢复验证。</blockquote>
+
+<h3>谁负责什么</h3>
+
+<tr><td>角色</td><td>负责范围</td><td>处置动作</td></tr>
+<tr><td>------</td><td>----------</td><td>----------</td></tr>
+<tr><td>一线运维</td><td>告警确认、现场操作、恢复验证</td><td>执行标准处置流程并记录结果</td></tr>
+<tr><td>系统维护 / 厂商</td><td>flow 应用、镜像、配置和探针</td><td>修改健康检查机制并定位反复故障根因</td></tr>
+<tr><td>DBA / 平台支撑</td><td>依赖服务、数据库、主机和网络</td><td>在扩展验证异常时介入处理</td></tr>
+
+<h2>恢复验证清单</h2>
+
+<p>完成恢复动作后，按以下顺序验证：</p>
+
+<ul>
+<li>集中化工单系统登录入口可正常登录。</li>
+<li>相关告警已消除或回落到正常阈值。</li>
+<li>所有 flow pod readiness 探针全部成功，状态 Ready。</li>
+<li>最近日志不再持续出现同类错误关键字。</li>
+<li>至少完成一次关键业务路径验证（新建工单/查询/审批）。</li>
+</ul>
+
+<h2>根因与预防</h2>
+
+<h3>根因判断</h3>
+
+<ul>
+<li>直接根因：flow 服务假死，pod 启动后服务实例未就绪。</li>
+<li>应用表现：用户无法登录集中化工单系统。</li>
+<li>处置边界：先恢复健康检查机制和实例就绪，再扩展检查依赖服务和网络。</li>
+</ul>
+
+<h3>长期预防</h3>
+
+<ul>
+<li>固化 flow 服务存活与就绪探针配置（避免临时改回导致复发）。</li>
+<li>补充 flow 服务假死的进程级监控告警（CPU、线程、响应时间）。</li>
+<li>建立 pod 就绪超时后的自动重启或告警升级机制。</li>
+<li>定期演练多实例同时未就绪的场景，确认故障域可控。</li>
+</ul>
+
+<h2>历史案例</h2>
+
+<tr><td>序号</td><td>发生时间</td><td>故障现象</td><td>恢复手段</td><td>故障原因</td><td>处理时长</td></tr>
+<tr><td>------</td><td>----------</td><td>----------</td><td>----------</td><td>----------</td><td>----------</td></tr>
+<tr><td>-</td><td>2026-07-09 11:00</td><td>用户无法登录集中化工单系统</td><td>修改 pod 健康检查机制</td><td>flow 服务假死</td><td>80min</td></tr>
+
+</article>
+    </section>
+  </main>
+</body>
+</html>

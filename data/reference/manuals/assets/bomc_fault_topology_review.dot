@@ -1,0 +1,144 @@
+digraph BOMC_Fault_Topology {
+  graph [
+    rankdir=LR,
+    bgcolor="white",
+    pad="0.25",
+    nodesep="0.35",
+    ranksep="0.70",
+    splines=ortho,
+    fontname="Microsoft YaHei",
+    label="BOMC 运维故障手册拓扑图（审查版）",
+    labelloc=t,
+    fontsize=20
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Microsoft YaHei",
+    fontsize=11,
+    color="#cbd5e1",
+    fillcolor="#f8fafc",
+    margin="0.10,0.06"
+  ];
+
+  edge [
+    color="#475569",
+    penwidth=1.6,
+    arrowsize=0.8
+  ];
+
+  subgraph cluster_flow {
+    label="故障处理流程";
+    color="#d6dde8";
+    style="rounded";
+    flow_user [label="用户 / 监控\n发现 CAS 服务异常\nBOMC 无法使用", fillcolor="#ecfeff", color="#0891b2"];
+    flow_notify [label="通知多域维护组", fillcolor="#f8fafc", color="#94a3b8"];
+    flow_restore [label="处理故障并恢复服务", fillcolor="#fef2f2", color="#dc2626", penwidth=2];
+    flow_confirm [label="通知相关人员\n确认平台恢复", fillcolor="#f0fdf4", color="#16a34a"];
+    flow_rootcause [label="回看故障日志\n分析本次触发原因", fillcolor="#fff7ed", color="#d97706"];
+    flow_user -> flow_notify -> flow_restore -> flow_confirm -> flow_rootcause;
+  }
+
+  subgraph cluster_modules {
+    label="BOMC 功能入口";
+    color="transparent";
+    res_mgr [label="资源管理", fillcolor="#eef2d9", color="#7c8760"];
+    mon_mgr [label="监控管理", fillcolor="#eef2d9", color="#7c8760"];
+    ops_ana [label="运营分析", fillcolor="#eef2d9", color="#7c8760"];
+    pub_mgr [label="公共管理", fillcolor="#fff7ed", color="#d97706", penwidth=2];
+    biz_mgr [label="业务管理", fillcolor="#eef2d9", color="#7c8760"];
+    ctl_mgr [label="操控管理", fillcolor="#eef2d9", color="#7c8760"];
+    collect_srv [label="采集服务", fillcolor="#eef2d9", color="#7c8760"];
+    { rank=same; res_mgr mon_mgr ops_ana pub_mgr biz_mgr ctl_mgr collect_srv; }
+  }
+
+  foura [label="4A 认证入口", shape=component, fillcolor="#f0fdf4", color="#65a30d"];
+  nginx [label="nginx 软负载均衡器\n:8080", fillcolor="#ecfccb", color="#65a30d"];
+  vip [label="BOMC访问入口\nVIP", fillcolor="#e0f2fe", color="#0284c7"];
+  route [label="BOMC服务路由\n10*.68 ~ 10*.97", fillcolor="#e0f2fe", color="#0284c7"];
+
+  subgraph cluster_webfault {
+    label="故障处理区 A\n当前故障必须处理主机";
+    color="#be123c";
+    fontcolor="#9f1239";
+    penwidth=3;
+    style="rounded";
+    web1 [label="10*.68\nWEB1\ntoptea-cas3 / toptea-web", fillcolor="white", color="#dc2626", penwidth=3];
+    web2 [label="10*.69\nWEB2\ntoptea-cas3 / toptea-web", fillcolor="white", color="#dc2626", penwidth=3];
+  }
+
+  subgraph cluster_panji {
+    label="磐基服务区\n10.108.158.0/24 / 10.108.157.0/24";
+    color="#cbd5e1";
+    style="rounded";
+    casmsg [label="bomc-cas-message"];
+    commonjob [label="bomc-common-jobservice"];
+    toptea [label="bomc-toptea-service\n公共管理重点核查 / 单点重启", fillcolor="#fff7ed", color="#d97706", penwidth=3];
+    sched [label="bomc-schedule-web-master"];
+    ctlm [label="bomc-toptea-ctlm"];
+    sysm [label="bomc-sysm-app-service"];
+    checker [label="bomc-sysm-app-service-checkerana"];
+    sysmrest [label="bomc-sysm-rest"];
+    resm [label="bomc-resm-parent"];
+    resmrest [label="bomc-resm-rest"];
+    indicator [label="bomc-indicator-parent"];
+    ccp1 [label="bomc-ccp-server-impl"];
+    ccp2 [label="bomc-ccp-server-impl-2"];
+  }
+
+  subgraph cluster_data {
+    label="数据与中间件区";
+    color="#cbd5e1";
+    style="rounded";
+    datanode [label="DATANODE1-3\nFDFS / DATANODE\n743 / 17474"];
+    app13 [label="APP1-3\nRedis 6380 / 6381\nZookeeper 12181", fillcolor="#eff6ff", color="#2563eb"];
+    db12 [label="DB1-2\n库：toptea / sysm-sd\n3306 / 10.108.131.113", fillcolor="#eff6ff", color="#2563eb", penwidth=2];
+  }
+
+  subgraph cluster_external {
+    label="采集与外部依赖";
+    color="#cbd5e1";
+    style="rounded";
+    ccpcluster [label="BOMC-CCP1-6\n10.108.131.85-90"];
+    namenode [label="NAMENODE2\n10.108.131.71 / 72"];
+    gr14 [label="GR1-4\n集团考核 / CAPES / GDC-IOP\n10.108.131.94-97"];
+  }
+
+  subgraph cluster_roles {
+    label="按角色定制操作命令";
+    color="#d6dde8";
+    style="rounded";
+    ops_cmd [shape=note, color="#d97706", fillcolor="#fff7ed", label="运维\n1. ps -ef | grep -E \"toptea-cas3|toptea-web\"\n2. kill -9 <PID>\n3. cd /toptea/apps/toptea-cas3/bin && ./startup.sh\n4. cd /toptea/apps/toptea-web/bin && ./startup.sh\n5. tail -f /toptea/apps/toptea-cas3/logs/catalina.out"];
+    dev_cmd [shape=note, color="#2563eb", fillcolor="#eff6ff", label="开发\n1. tail -f /toptea/apps/toptea-web/logs/catalina.out\n2. grep -E \"ERROR|Exception|连接池|线程池|CAS\" catalina.out\n3. 结合认证链路、线程池日志定位根因"];
+    dba_cmd [shape=note, color="#7c3aed", fillcolor="#f5f3ff", label="DBA\n1. 核查 DB1-2 的 3306、连接数、慢 SQL、阻塞会话\n2. mysql -h 10.108.131.113 -P 3306 -u <user> -p -e \"show full processlist;\"\n3. mysql -h 10.108.131.113 -P 3306 -u <user> -p -e \"show status like 'Threads_connected';\""];
+    { rank=same; ops_cmd dev_cmd dba_cmd; }
+  }
+
+  foura -> nginx -> vip -> route;
+  route -> web1 [style=dashed, color="#111827", penwidth=2];
+  route -> web2 [style=dashed, color="#111827", penwidth=2];
+  web1 -> toptea [color="#dc2626", penwidth=2];
+  web2 -> toptea [color="#dc2626", penwidth=2];
+  pub_mgr -> toptea [style=dashed, color="#d97706", penwidth=2];
+
+  toptea -> casmsg;
+  toptea -> commonjob;
+  toptea -> sched;
+  toptea -> ctlm;
+  toptea -> sysm;
+  toptea -> checker;
+  toptea -> sysmrest;
+  toptea -> resm;
+  toptea -> resmrest;
+  toptea -> indicator;
+  resmrest -> ccp1;
+  resmrest -> ccp2;
+
+  toptea -> datanode;
+  toptea -> app13 [color="#2563eb"];
+  toptea -> db12 [color="#2563eb"];
+  ccp1 -> ccpcluster;
+  ccpcluster -> namenode;
+  ccpcluster -> gr14;
+}

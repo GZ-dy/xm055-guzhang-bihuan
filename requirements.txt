@@ -1,0 +1,21 @@
+# 故障闭环系统 V1 依赖清单 (2026-07-09 第三轮对账后落地)
+#
+# 三类包：
+#   1. runtime (required) — 主流程必装
+#   2. ocr-optional — 截图 OCR 才需要；缺失时 .ocr.txt 旁路仍工作
+#   3. dev / test — 跑 unittest / 离线 wheelhouse 准备时才需要
+
+# === runtime (required) ===
+openpyxl>=3.1.0,<4.0.0
+python-docx>=1.1.0,<2.0.0
+# 标准库够用，不需要 requests / numpy / 其他三方包
+
+# === ocr-optional ===
+# 截图 OCR (pytesseract + Pillow)；本地必须先装 tesseract-ocr 和中文语言包 chi_sim
+# 缺失不会让主流程挂，只会让 --screenshot 退化到 .ocr.txt 旁路
+pytesseract>=0.3.10 ; sys_platform != "win32" or python_version >= "3.7"
+Pillow>=10.0.0,<12.0.0 ; sys_platform != "win32" or python_version >= "3.7"
+
+# === dev / test ===
+# 纯 stdlib 跑 unittest；这里留位但不强制 pin，避免污染最小依赖
+# (如果以后接 pytest 再加)

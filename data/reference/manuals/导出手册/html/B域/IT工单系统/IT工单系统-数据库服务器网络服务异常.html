@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IT工单系统 - 数据库服务器网络服务异常 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>IT工单系统 - 数据库服务器网络服务异常 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/B域/IT工单系统/IT工单系统-数据库服务器网络服务异常.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/B域/IT工单系统/IT工单系统-数据库服务器网络服务异常.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#查看相关进程">查看相关进程</a><a class="nav-link nav-level-3" href="#查看服务状态">查看服务状态</a><a class="nav-link nav-level-3" href="#查看最近日志">查看最近日志</a><a class="nav-link nav-level-3" href="#检查数据库连接与端口">检查数据库连接与端口</a><a class="nav-link nav-level-3" href="#检查资源与磁盘">检查资源与磁盘</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>IT工单系统 - 数据库服务器网络服务异常 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 数据库 | <strong>所属域</strong>: B域 | <strong>首次发生</strong>: 2026-06-20 | <strong>累计次数</strong>: 4次</p><p><strong>最后更新</strong>: 2026-06-20 | <strong>数据来源</strong>: 多域系统故障记录表</p><p><strong>适用场景</strong>: 数据库服务器网络服务异常 / IT工单系统 页面、接口或任务异常</p><p><strong>处置目标</strong>: 确认 数据库服务器网络服务异常 的主故障对象，完成恢复动作和业务验证。</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/it_order_db_network_topology_marked.png" alt="IT 工单系统数据库网络服务异常故障拓扑" /><figcaption>IT 工单系统数据库网络服务异常故障拓扑</figcaption></figure><p>图中标注对象为 IT工单系统 在 数据库服务器网络服务异常 场景下的主处理对象和恢复验证对象。处置时先确认主故障点，再扩展到依赖链路和业务验证，避免只根据单个告警对象做局部处理。</p><p>关键对象：</p><ul><li>IT工单系统 应用节点：确认页面、接口或任务是否受数据库/端口异常影响。</li><li>数据库或中间件节点：确认实例、监听、端口、连接数和资源水位。</li><li>业务验证入口：恢复后验证页面、接口、任务结果和数据回写。</li></ul><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>数据库实例、监听、端口或连接数异常</td><td>DBA/平台先恢复数据库网络服务和监听</td><td>数据库监听/网络服务，具体服务名以现场为准</td></tr><tr><td>后续</td><td>数据库恢复后应用连接池仍不可用</td><td>刷新连接池或重启应用侧服务</td><td><code>itsm</code> 应用服务</td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li>2026年6月20日10:13分，IT工单系统出现数据库服务宕机，系统不可用。</li><li>2026年6月20日11:13分，IT工单系统数据库服务宕机，系统页面无法正常访问，工单流程中断。故障导致所有依赖IT工单系统的业务工单无法创建、流转和处理，影响范围覆盖全部在用IT工单模块。</li><li>2026年6月20日12:13分，IT工单系统再次出现数据库服务宕机，系统无法正常提供服务。此次为同日第三次数据库服务中断，前两次分别发生于当日10:13至10:59和11:13至12:59。故障影响范围包括IT工单系统的创建、流转、查询等全部业务功能。</li><li>IT工单系统 页面、接口或任务无法正常使用，日志出现数据库或缓存连接异常。</li><li>数据库、中间件或端口状态异常，业务请求无法正常落库或回写。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>应用日志出现连接失败或端口异常</td><td>检查数据库/中间件端口和连接数</td><td>优先按依赖链路异常处理</td></tr><tr><td>实例或缓存恢复但页面仍异常</td><td>检查连接池和关键交易</td><td>可能需要应用侧刷新或重启</td></tr><tr><td>数据回写异常</td><td>核对任务结果和数据库状态</td><td>确认是否存在残余故障</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>记录告警时间、业务现象、数据库或中间件相关错误关键字。</li><li>确认应用进程、数据库/缓存端口、连接数和资源水位。</li><li>通知 DBA 或对应支撑团队恢复数据库、中间件或端口服务。</li><li>依赖恢复后检查应用连接池、关键交易、任务结果和数据回写。</li><li>若页面仍异常，再转入应用进程或厂商侧排查。</li></ol><h2 id="关键检查命令">关键检查命令</h2><p>以下命令已按本故障场景去重整理；每条命令先说明用途，执行前按实际主机、路径、权限和变更流程确认。</p><h3 id="查看相关进程">查看相关进程</h3><p>确认相关服务进程是否存活、是否存在重复或僵死进程。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep -Ei &quot;it&quot; | grep -v grep</code></pre></div><h3 id="查看服务状态">查看服务状态</h3><p>若服务由 systemd 管理，可直接确认当前状态与最近报错。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>systemctl status it --no-pager</code></pre></div><h3 id="查看最近日志">查看最近日志</h3><p>先看近 200 行日志，快速确认报错关键字与时间点。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>tail -n 200 /var/log/it.log</code></pre></div><h3 id="检查数据库连接与端口">检查数据库连接与端口</h3><p>确认数据库实例端口、连接状态和依赖服务是否正常。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ss -lntp | grep -Ei &quot;db2|mysql|oracle|redis|1521|3306|50000|6379&quot;</code></pre></div><h3 id="检查资源与磁盘">检查资源与磁盘</h3><p>数据库网络服务异常、连接异常常与资源打满或磁盘异常相关。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>free -h &amp;&amp; df -h</code></pre></div><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><section class="meta-card"><p>IT工单系统 出现 数据库服务器网络服务异常，当前已按手册确认故障对象为 IT工单系统 应用节点。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成页面、接口、任务和监控恢复验证。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、应用侧拨测、业务验证</td><td>执行端口、日志、页面和任务验证</td></tr><tr><td>DBA / 中间件支撑</td><td>数据库、缓存、监听、连接数和实例状态</td><td>恢复依赖服务并反馈链路状态</td></tr><tr><td>开发 / 厂商</td><td>恢复后仍异常的应用链路</td><td>排查连接池、重试、配置和接口耗时</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>完成恢复动作后，按以下顺序验证：</p><ol><li>IT工单系统 关键页面或入口可正常访问。</li><li>相关告警已消除或回落到正常阈值。</li><li>最近日志不再持续出现同类错误关键字。</li><li>数据库或中间件端口、连接数和实例状态恢复正常。</li><li>关键交易、任务结果和数据回写正常。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li>直接根因：数据库、缓存、中间件或端口服务异常，导致应用连接和数据回写失败。</li><li>应用表现：页面、接口或任务异常，日志集中出现连接失败、超时或实例不可达。</li><li>处置边界：依赖恢复前不将应用表现误判为单纯页面或 Tomcat 故障。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>建立实例、端口、连接数、连接池和关键 SQL 的组合监控。</li><li>固化数据库/缓存异常后的应用侧恢复验证流程。</li><li>对短时间复发的依赖异常输出专项根因和容量治理动作。</li></ul><h2 id="历史案例">历史案例</h2><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>67</td><td>2026-06-20 10:13</td><td>IT工单系统数据库服务宕机，系统不可用</td><td>重启数据库主机服务，恢复数据库实例运行</td><td>数据库实例进程资源耗尽并触发 OOM，应用连接治理不足</td><td>46min</td></tr><tr><td>71</td><td>2026-06-20 12:13</td><td>同日第三次数据库服务中断，创建、流转、查询全部受影响</td><td>重启数据库主机服务</td><td>原始记录 system 字段异常，已归并到...</td><td>106min</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

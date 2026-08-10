@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPENAPI - 数据库服务器网络服务异常 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>OPENAPI - 数据库服务器网络服务异常 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/OPENAPI/OPENAPI-数据库服务器网络服务异常.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/OPENAPI/OPENAPI-数据库服务器网络服务异常.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#1-拨测数据库主备和-50000-端口">1. 拨测数据库主备和 50000 端口</a><a class="nav-link nav-level-3" href="#2-查信令接口拨测日志">2. 查信令接口拨测日志</a><a class="nav-link nav-level-3" href="#3-查-tomcat-进程和数据库报错">3. 查 Tomcat 进程和数据库报错</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>OPENAPI - 数据库服务器网络服务异常 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 数据库 | <strong>所属域</strong>: 经分域 | <strong>首次发生</strong>: 2026-04-01 | <strong>累计次数</strong>: 6次</p><p><strong>最后更新</strong>: 2026-04-30 | <strong>数据来源</strong>: 多域系统故障记录表 + 2026-04-01 专项复盘</p><p><strong>适用场景</strong>: OpenAPI 页面或接口不可用 / 数据库 50000 端口异常 / 能运接口成功率异常 / 信令接口拨测日志异常 / 原数据库类口径故障</p><p><strong>处置目标</strong>: 通过应用节点、数据库主备、DB2 监听和 <code>50000</code> 端口检查，确认是否为数据库主机网络服务异常，并完成 OpenAPI 业务恢复验证。</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/openapi_db_network_service_topology_marked.png" alt="OPENAPI 2026-04-01 数据库服务器网络服务异常故障拓扑" /><figcaption>OPENAPI 2026-04-01 数据库服务器网络服务异常故障拓扑</figcaption></figure><p>图中橙框为 OpenAPI 告警与业务验证对象，紫框为数据库主备处理对象。处置时优先核对数据库主机网络服务、DB2 监听和 <code>50000</code> 端口，不应只依据告警对象名称定位单台 OpenAPI 机器。</p><p>关键对象：</p><ul><li><code>10.252.157.161</code>：当前主库，重点确认主机可达性、DB2 监听和 <code>50000</code> 端口。</li><li><code>10.252.157.134</code>：当前备库，主库异常时同步确认可达性。</li><li><code>OPENAPI-09 / 10 / 11</code>：Tomcat 应用节点，用于执行数据库拨测、日志检查和接口验证。</li><li><code>OPENAPI-01</code>：Nginx / F5 拨测侧典型对象；告警显示为 01 时，不代表只处理 01。</li><li><code>OPENAPI-12</code>：Redis 节点，数据库恢复后作为缓存链路补充验证。</li></ul><p>历史记录中标记为数据库类口径的 OPENAPI 故障统一归并到本手册，不再单独维护独立数据库类指引。</p><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>10.252.157.161 主库、10.252.157.134 备库或 DB2 50000 端口异常</td><td>先恢复 DB2 监听、主备网络连通和数据库状态</td><td>DB2 监听/网络服务，具体服务名以现场为准</td></tr><tr><td>后续</td><td>DB2 恢复后 OPENAPI 仍连接失败</td><td>刷新连接池或重启受影响 Tomcat 节点</td><td>OPENAPI Tomcat/应用服务</td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li><code>OpenAPI</code> 页面无法访问，或接口调用集中超时。</li><li>数据库 <code>50000</code> 端口状态返回 <code>False</code>，例如 <code>XJ_大数据_OpenAPI_数据库_50000端口状态_OPENAPI-01</code>。</li><li>能运 OpenAPI 接口成功率异常，尤其低于 <code>80%</code>。</li><li>信令接口拨测日志值超过 <code>2000</code>，例如 <code>XJ_openapi_信令接口拨测-实时接口*状态_27</code>。</li><li>应用日志集中出现 <code>connection</code>、<code>timeout</code>、<code>datasource</code>、<code>db2</code>、<code>sql</code>、<code>50000</code> 等数据库相关报错。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>多台 OpenAPI 节点都报数据库 <code>50000</code> 不通</td><td>登录 <code>OPENAPI-09 / 10 / 11</code> 任一应用节点拨测主备库</td><td>优先按数据库侧链路异常处理</td></tr><tr><td>页面不可用但 Tomcat 进程仍在</td><td>查应用日志是否集中报数据库连接异常</td><td>不要先重启 Tomcat，先确认数据库链路</td></tr><tr><td>信令接口日志值超过 <code>2000</code></td><td>查数据库端口和 Tomcat 日志</td><td>多数情况下是数据库不可达拖慢接口</td></tr><tr><td>数据库端口恢复 <code>OK</code> 但页面仍异常</td><td>查连接池、日志和接口返回</td><td>可能需要应用侧刷新连接池或滚动恢复</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>记录告警时间、告警对象、成功率或当前值、受影响业务。</li><li>登录 <code>OPENAPI-09 / OPENAPI-10 / OPENAPI-11</code> 任一应用节点。</li><li>对照故障拓扑确认 OpenAPI 告警对象、应用节点和数据库主备关系。</li><li>拨测数据库主备和 <code>50000</code> 端口。</li><li>查询信令接口耗时和 Tomcat 应用日志，确认是否存在数据库连接异常。</li><li>若数据库主备不可达或 <code>50000</code> 返回 <code>False</code>，通知亚信数据库团队处理数据库主机网络服务和 DB2 监听。</li><li>数据库恢复后，按恢复验证清单逐项确认，不以单一页面打开作为恢复依据。</li></ol><h2 id="关键检查命令">关键检查命令</h2><h3 id="1-拨测数据库主备和-50000-端口">1. 拨测数据库主备和 50000 端口</h3><p>在 <code>OPENAPI-09 / OPENAPI-10 / OPENAPI-11</code> 任一应用节点执行：</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ping 10.252.157.161
+ping 10.252.157.134
+for ip in 10.252.157.161 10.252.157.134; do
+  (timeout 1 bash -c &quot;cat &lt; /dev/null &gt; /dev/tcp/$ip/50000&quot; &gt;/dev/null 2&gt;&amp;1) \
+    &amp;&amp; echo &quot;$ip OK&quot; || echo &quot;$ip False&quot;
+done</code></pre></div><ul><li>返回 <code>OK</code>：数据库端口可达，继续查接口耗时和应用日志。</li><li>返回 <code>False</code>：数据库端口不可达，优先通知数据库团队，不要把问题扩大成 Tomcat 故障。</li><li>主备都不可达，或多台应用节点都返回 <code>False</code>：按数据库主机网络服务异常升级处理。</li></ul><h3 id="2-查信令接口拨测日志">2. 查信令接口拨测日志</h3><p>用于判断外部接口耗时是否持续超过阈值，并结合数据库端口结果确认是否由数据库不可达引起。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>cd /opt/tomcat/apache-tomcat-7.0.77/bin/logs
+LOG=&quot;catalina.$(date +%Y-%m-%d).log&quot;
+PATTERN=&quot;com.gmcc.realUsrAreaInfo;ESBURL&quot;
+tail -n500 &quot;$LOG&quot; \
+  | grep &quot;$PATTERN&quot; \
+  | grep -v &#x27;start httpclient.execute....&#x27; \
+  | awk -F &#x27;:&#x27; &#x27;{sub(/ms$/,&quot; &quot;,$NF);print $NF}&#x27;</code></pre></div><ul><li>持续超过 <code>2000</code>：按接口异常继续跟踪，并结合数据库端口结果判断是否由数据库不可达引起。</li><li>恢复后应回落到 <code>0-2000</code> 区间。</li></ul><h3 id="3-查-tomcat-进程和数据库报错">3. 查 Tomcat 进程和数据库报错</h3><p>用于确认 Tomcat 是否仍在运行，并快速筛选连接失败、超时、DB2、SQL 和 50000 端口相关错误。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep tomcat | grep -v grep
+cd /opt/tomcat/apache-tomcat-7.0.77/bin/logs
+tail -n200 catalina.$(date +%Y-%m-%d).log \
+  | grep -Ei &quot;connection|timeout|datasource|db2|sql|50000|realUsrAreaInfo&quot;</code></pre></div><p>如果日志集中出现数据库连接异常、配置读取失败、日志写入失败，说明应用侧表现只是结果，主处理对象仍是数据库主机网络服务或 DB2 监听。</p><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><p>可以直接按下面口径同步：</p><section class="meta-card"><p>OPENAPI 出现页面或接口异常，应用节点拨测数据库主备 <code>10.252.157.161 / 10.252.157.134</code> 及 <code>50000</code> 端口异常。请亚信数据库团队优先检查数据库主机网络服务、DB2 监听和主备状态。运维侧同步观察 OpenAPI 接口成功率、信令接口耗时和业务恢复情况。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、应用节点拨测、业务验证</td><td>执行端口拨测、日志检查和恢复验证</td></tr><tr><td>DBA / 亚信数据库团队</td><td>数据库主机网络服务、DB2 监听、主备状态</td><td>恢复数据库主机网络服务或 DB2 监听，反馈数据库链路状态</td></tr><tr><td>开发 / 厂商</td><td>数据库恢复后仍异常的应用链路</td><td>排查连接池、重试、配置读取、写日志和接口耗时问题</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>数据库团队反馈恢复后，按下面顺序验证：</p><ol><li><code>10.252.157.161 / 10.252.157.134</code> 至少一侧数据库链路稳定可达。</li><li>数据库 <code>50000</code> 端口拨测返回 <code>OK</code>。</li><li>信令接口拨测日志值回落到 <code>0-2000</code>。</li><li>能运 OpenAPI 接口成功率恢复正常，且不低于 <code>80%</code>。</li><li><code>网格通</code>、<code>和商汇断卡</code>、<code>实时销量</code>、<code>全域旅游</code> 等关键业务恢复。</li><li>OpenAPI 日志不再持续出现数据库连接异常、配置读取失败或日志写入失败。</li><li>若页面仍不可用，再通知开发或厂商检查连接池和应用进程，不要重复通知数据库团队做同一动作。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li><code>直接根因</code>：数据库服务器网络服务异常，导致主库或备库在故障期间不可达。</li><li><code>应用表现</code>：OpenAPI 页面或接口异常，日志集中出现数据库连接、配置读取或写日志报错。</li><li><code>结论</code>：此类故障归类为数据库服务器网络服务异常，不再单独维护独立数据库类处置路径。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>增加数据库主机 <code>ping</code>、数据库端口可达性、DB2 监听与实例状态的组合监控。</li><li>对 OpenAPI 增加 HTTP 成功率、接口调用成功率、数据库连接异常次数、<code>50000</code> 端口状态和信令接口拨测日志值的分钟级监控。</li><li>固化数据库主备切换演练流程，至少按报告要求在月内完成一次应急演练。</li><li>故障恢复后增加数据波动复核步骤，避免把业务正常波动误判为残余故障。</li></ul><h2 id="历史案例">历史案例</h2><section class="meta-card"><p>本手册只保留首发代表案例和最近复发案例；完整流水记录以月度故障表为准。2026-04-30 当天曾出现 4 次短时复发，均按数据库网络服务异常归并处理。</p></section><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>23</td><td>2026-04-01 08:58</td><td>页面无法访问</td><td>数据库组处理</td><td>数据库网络服务异常</td><td>35min</td></tr><tr><td>50</td><td>2026-04-30 15:34</td><td>页面无法访问</td><td>数据库组处理</td><td>数据库网络服务异常</td><td>5min</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

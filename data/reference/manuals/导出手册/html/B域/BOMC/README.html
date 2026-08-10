@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BOMC 运维总览与故障处理索引</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>BOMC 运维总览与故障处理索引</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/B域/BOMC/README.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/B域/BOMC/README.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#系统概览">系统概览</a><a class="nav-link nav-level-3" href="#处理原则">处理原则</a><a class="nav-link nav-level-2" href="#网络拓扑">网络拓扑</a><a class="nav-link nav-level-2" href="#机器命名规范">机器命名规范</a><a class="nav-link nav-level-2" href="#重点故障点与处置边界">重点故障点与处置边界</a><a class="nav-link nav-level-2" href="#角色分工">角色分工</a><a class="nav-link nav-level-3" href="#运维">运维</a><a class="nav-link nav-level-3" href="#磐基平台运维">磐基平台运维</a><a class="nav-link nav-level-3" href="#开发">开发</a><a class="nav-link nav-level-2" href="#运维提醒">运维提醒</a><a class="nav-link nav-level-2" href="#指引列表">指引列表</a><a class="nav-link nav-level-2" href="#本月高频关注">本月高频关注</a>
+      </aside>
+      <article class="article">
+        <h1>BOMC 运维总览与故障处理索引</h1><section class="meta-card"><p><strong>所属域</strong>: B域 | <strong>累计故障</strong>: 9次 | <strong>指引数量</strong>: 3篇</p></section><h2 id="系统概览">系统概览</h2><p>BOMC 通过统一入口提供登录、监控告警和运维操作能力，认证依赖 10*.68、10*.69 两台 Web 主机上的 CAS 与 Web 服务，公共/资源/采集/监控/操控/大屏模块统一在 B域磐基界面管理。</p><ul><li>服务范围：覆盖 BOMC 登录认证、监控告警、资源管理、采集、操控与大屏展示链路。</li></ul><h3 id="处理原则">处理原则</h3><ol><li>先处理 10*.68 web1、10*.69 web2 主机，再通过 4A 进入 B域磐基界面处理磐基服务模块。</li><li>公共模块、资源模块、采集模块、监控模块、操控模块、大屏模块均属于磐基服务，不作为主机 SSH 处理对象。</li><li>页面打不开、登录超时或监控告警页无响应时，ps 看到 toptea-web / toptea-cas3 进程存在也按假活处理，先定位 PID，再 kill 旧进程并重启服务。</li><li>CAS 故障、线程池满等登录类异常恢复后，优先确认 bomc-toptea-service 服务状态。</li></ol><h2 id="网络拓扑">网络拓扑</h2><figure class="manual-figure"><img src="../../../../assets/bomc_panji_network_topology.png" alt="BOMC 系统网络拓扑图" /><figcaption>BOMC 系统网络拓扑图</figcaption></figure><section class="meta-card"><p>红框为当前故障必须处理的主机；橙框为主机恢复后按需进入 4A 与 B域磐基界面执行的扩展处理区。</p></section><h2 id="机器命名规范">机器命名规范</h2><p>目标机器范围为 10*.68 ~ 10*.97；本系统常见登录类故障优先处理两台 Web 主机。</p><table class="doc-table"><thead><tr><th>IP标识</th><th>规范名称</th><th>节点说明</th><th>处理提醒</th></tr></thead><tbody><tr><td>10*.68</td><td>web1</td><td>CAS / Web 主机</td><td>登录类故障优先处理节点；页面不可用时 ps 仅用于定位 PID，需清理假活 toptea-cas3、toptea-web 后重启。</td></tr><tr><td>10*.69</td><td>web2</td><td>CAS / Web 主机</td><td>登录类故障优先处理节点，需与 web1 一并恢复和验证；页面不可用时同样按假活进程清理后重启。</td></tr></tbody></table><h2 id="重点故障点与处置边界">重点故障点与处置边界</h2><table class="doc-table"><thead><tr><th>故障类型</th><th>重点位置</th><th>处置边界</th><th>验证要求</th></tr></thead><tbody><tr><td>CAS 服务异常</td><td>10*.68 web1 / 10*.69 web2</td><td>主机侧查询 toptea-cas3、toptea-web 只用于定位 PID；进程存在但页面不可用时按假活清理，按顺序重启 CAS 与 Web。</td><td>验证登录页、监控告警页面、CAS/Web 进程和日志恢复正常。</td></tr><tr><td>线程池满</td><td>10*.68 web1 / 10*.69 web2 + bomc-toptea-service</td><td>主机恢复后如页面仍异常，需通过 4A 登录 B域磐基界面，优先确认 bomc-toptea-service 并执行单点重启。</td><td>验证登录、首页、告警查询及下游磐基服务状态。</td></tr><tr><td>磐基服务异常扩散</td><td>B域磐基界面服务模块</td><td>仅在主机侧恢复后仍有资源、采集、监控、操控或大屏异常时，才扩展到模块级单点重启。</td><td>按模块状态逐项确认服务恢复，不将服务模块误当成主机处理。</td></tr></tbody></table><h2 id="角色分工">角色分工</h2><h3 id="运维">运维</h3><ul><li>负责范围：Web 主机、登录认证、页面访问、日志验证</li><li>处置动作：</li></ul><ol><li>优先处理 10*.68 web1、10*.69 web2 上的 toptea-cas3、toptea-web。</li><li>页面打不开但进程仍存在时，按假活进程处理，先 kill 旧进程再启动服务。</li><li>恢复后回查登录页、监控告警页面与核心入口。</li><li>若主机恢复后仍异常，再进入磐基界面扩展处置。</li></ol><h3 id="磐基平台运维">磐基平台运维</h3><ul><li>负责范围：B域磐基界面中的服务模块</li><li>处置动作：</li></ul><ol><li>通过 4A 登录 B域磐基界面。</li><li>优先确认 bomc-toptea-service，必要时再扩展到 bomc-cas-message 及下游模块。</li><li>执行单点重启后配合业务验证。</li></ol><h3 id="开发">开发</h3><ul><li>负责范围：代码缺陷、线程池与连接池根因修复</li><li>处置动作：</li></ul><ol><li>定位 CAS 代码缺陷、线程池耗尽和连接池满的真实触发条件。</li><li>评估高并发场景下的线程池、重试与超时配置。</li><li>推动监控与自动恢复能力补齐。</li></ol><h2 id="运维提醒">运维提醒</h2><ul><li>BOMC 登录类高频故障建议统一沉淀为“主机处理 + 磐基界面处理 + 恢复验证”三段式结构。</li><li>BOMC 页面不可用时不能只看进程存活状态；ps 后需要结合页面响应和日志判断是否假活，必要时 kill 旧进程并重启。</li><li>后续若补齐更多机器映射，可继续向 system_profiles 扩展主机命名表。</li></ul><h2 id="指引列表">指引列表</h2><table class="doc-table"><thead><tr><th>序号</th><th>故障模式</th><th>分类</th><th>发生次数</th><th>最近发生</th></tr></thead><tbody><tr><td>1</td><td>线程池满</td><td>应用</td><td>5</td><td>2026-04-13</td></tr><tr><td>2</td><td>cas服务异常</td><td>应用</td><td>2</td><td>2026-06-20</td></tr><tr><td>3</td><td>30443端口冲突与公共模块无法连接</td><td>网络</td><td>1</td><td>2026-01-17</td></tr></tbody></table><h2 id="本月高频关注">本月高频关注</h2><ul><li>线程池满：累计 5 次，最近发生于 2026-04-13</li><li>cas服务异常：累计 2 次，最近发生于 2026-06-20</li><li>30443端口冲突与公共模块无法连接：累计 1 次，最近发生于 2026-01-17</li></ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

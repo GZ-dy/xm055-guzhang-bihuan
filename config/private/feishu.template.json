@@ -1,0 +1,15 @@
+{
+  "_comment": "故障闭环系统 V1 飞书在线表配置脱敏模板。新成员首次接入时复制本文件为 feishu.json，再把以下 REPLACE_ME 字段替换为真实值。config/private/feishu.json 默认不入便携包；本 template 默认入包可见，是因为它本身不含密钥。AGENTS.md 第 9 节有完整约定。",
+
+  "app_id": "REPLACE_ME_cli_xxxxxxxxxxxxxxxx",
+  "app_secret": "REPLACE_ME_xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "app_token": "REPLACE_ME_xxxxxxxxxxxxxxxxxxxxxxxx",
+  "table_id": "REPLACE_ME_tblxxxxxxxxxxxxxxxx",
+  "view_id": "REPLACE_ME_vewxxxxxxxxxxxxxxxx",
+
+  "table_url": "REPLACE_ME_https://scnxxxxxx.feishu.cn/base/xxxxxxxx?table=xxxxxxxx&view=xxxxxxxx",
+
+  "field_map": {
+    "_comment": "可选：在线表字段名 → incident_context 字段名 的映射；空 dict 表示 pipeline 默认映射已够用。新成员若接入自定义字段表，请按 FAULT_CLOSED_LOOP_RULES.md 里的字段契约填写。"
+  }
+}

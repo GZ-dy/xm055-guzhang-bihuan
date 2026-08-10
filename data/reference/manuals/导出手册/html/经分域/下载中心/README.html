@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>下载中心 运维总览与故障处理索引</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>下载中心 运维总览与故障处理索引</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/下载中心/README.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/下载中心/README.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#系统概览">系统概览</a><a class="nav-link nav-level-3" href="#处理原则">处理原则</a><a class="nav-link nav-level-2" href="#网络拓扑">网络拓扑</a><a class="nav-link nav-level-2" href="#机器命名规范">机器命名规范</a><a class="nav-link nav-level-2" href="#重点故障点与处置边界">重点故障点与处置边界</a><a class="nav-link nav-level-2" href="#角色分工">角色分工</a><a class="nav-link nav-level-3" href="#运维">运维</a><a class="nav-link nav-level-3" href="#厂商">厂商</a><a class="nav-link nav-level-3" href="#开发">开发</a><a class="nav-link nav-level-2" href="#运维提醒">运维提醒</a><a class="nav-link nav-level-2" href="#指引列表">指引列表</a><a class="nav-link nav-level-2" href="#本月高频关注">本月高频关注</a>
+      </aside>
+      <article class="article">
+        <h1>下载中心 运维总览与故障处理索引</h1><section class="meta-card"><p><strong>所属域</strong>: 经分域 | <strong>累计故障</strong>: 5次 | <strong>指引数量</strong>: 2篇</p></section><h2 id="系统概览">系统概览</h2><p>下载中心当前高频故障集中在 10.253.43.13 ftp / 程序执行节点，用户同步程序 sysdmc 和文件扫描程序 scanPy 均通过 BOMC 自动化预案触发恢复。</p><ul><li>服务范围：覆盖下载中心 10.253.43.13 程序执行节点、10.253.43.44-45 前台应用主备与 10.252.149.105/107 数据库验证链路。</li></ul><h3 id="处理原则">处理原则</h3><ol><li>程序故障默认只处理 10.253.43.13 节点，不默认扩展到 10.253.43.44-45。</li><li>用户同步程序和文件扫描程序应拆分为独立故障指引，但共享同一系统拓扑和机器命名规范。</li><li>BOMC 自动化预案执行完成后，需要同步通知厂商并回查页面、日志和任务结果。</li></ol><h2 id="网络拓扑">网络拓扑</h2><figure class="manual-figure"><img src="../../../../assets/download_center_network_topology.png" alt="下载中心系统网络拓扑图" /><figcaption>下载中心系统网络拓扑图</figcaption></figure><section class="meta-card"><p>基于原始下载中心拓扑图标注 10.253.43.13 处理节点、10.253.43.44-45 前台验证对象和 10.252.149.105/107 数据库验证链路。</p></section><h2 id="机器命名规范">机器命名规范</h2><p>统一按机器后两位标识处理节点；13 为 ftp / 程序执行节点，44-45 为前台应用主备，日常程序故障不作为默认处置对象。</p><table class="doc-table"><thead><tr><th>IP标识</th><th>规范名称</th><th>节点说明</th><th>处理提醒</th></tr></thead><tbody><tr><td>10*.13</td><td>下载中心-FTP/程序执行节点</td><td>ftp / 程序执行节点</td><td>sysdmc、scanPy 默认通过 BOMC 自动化预案处理。</td></tr><tr><td>10*.44-45</td><td>下载中心-前台应用主备</td><td>前台应用</td><td>恢复后验证对象，当前两类程序故障一般不作为默认处理机器。</td></tr><tr><td>DB</td><td>下载中心-数据库</td><td>数据库依赖</td><td>预案成功后仍异常再扩展验证。</td></tr></tbody></table><h2 id="重点故障点与处置边界">重点故障点与处置边界</h2><table class="doc-table"><thead><tr><th>故障类型</th><th>重点位置</th><th>处置边界</th><th>验证要求</th></tr></thead><tbody><tr><td>用户同步程序卡死</td><td>10.253.43.13 / sysdmc</td><td>在 BOMC 自动化预案中搜索 sysdmc 并执行恢复预案，不在主机侧手工重启。</td><td>验证预案结果、同步任务恢复和厂商通知完成。</td></tr><tr><td>文件扫描程序卡死</td><td>10.253.43.13 / scanPy</td><td>在 BOMC 自动化预案中搜索 scanPy 并执行恢复预案，不默认处理 10.253.43.44-45。</td><td>验证扫描任务恢复、页面可用性和相关日志正常。</td></tr></tbody></table><h2 id="角色分工">角色分工</h2><h3 id="运维">运维</h3><ul><li>负责范围：BOMC 自动化预案执行、结果验证</li><li>处置动作：</li></ul><ol><li>在 BOMC 自动化预案中搜索对应程序恢复预案。</li><li>执行恢复预案后回查页面、任务状态和日志。</li><li>完成后通知厂商并确认结果。</li></ol><h3 id="厂商">厂商</h3><ul><li>负责范围：程序恢复确认与后续问题跟踪</li><li>处置动作：</li></ul><ol><li>接收重启完成通知并协助确认业务恢复。</li><li>若预案执行后程序仍不稳定，配合定位程序逻辑问题。</li><li>沉淀程序异常的后续优化方案。</li></ol><h3 id="开发">开发</h3><ul><li>负责范围：程序稳定性和自动化预案优化</li><li>处置动作：</li></ul><ol><li>定位 sysdmc、scanPy 反复卡死的触发条件。</li><li>完善程序监控、日志关键字和自动恢复能力。</li><li>优化自动化预案返回值与失败告警机制。</li></ol><h2 id="运维提醒">运维提醒</h2><ul><li>下载中心适合继续保持“系统总览一页 + 两个故障手册分开”的结构。</li><li>若后续补齐更多主机信息，可把 10*.44、10*.45 的职责进一步细化到机器命名表。</li></ul><h2 id="指引列表">指引列表</h2><table class="doc-table"><thead><tr><th>序号</th><th>故障模式</th><th>分类</th><th>发生次数</th><th>最近发生</th></tr></thead><tbody><tr><td>1</td><td>文件扫描程序卡死</td><td>应用</td><td>2</td><td>2026-06-03</td></tr><tr><td>2</td><td>用户同步程序卡死</td><td>应用</td><td>1</td><td>2026-05-11</td></tr></tbody></table><h2 id="本月高频关注">本月高频关注</h2><ul><li>文件扫描程序卡死：累计 2 次，最近发生于 2026-06-03</li><li>用户同步程序卡死：累计 1 次，最近发生于 2026-05-11</li></ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

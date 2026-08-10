@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPENAPI - 主机软死锁 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>OPENAPI - 主机软死锁 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/OPENAPI/OPENAPI-主机软死锁.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/OPENAPI/OPENAPI-主机软死锁.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#保留主机资源现场">保留主机资源现场</a><a class="nav-link nav-level-3" href="#查看内核和异常进程">查看内核和异常进程</a><a class="nav-link nav-level-3" href="#检查-tomcat-进程">检查 Tomcat 进程</a><a class="nav-link nav-level-3" href="#查看-openapi-应用日志">查看 OPENAPI 应用日志</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>OPENAPI - 主机软死锁 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 主机 | <strong>所属域</strong>: 经分域 | <strong>首次发生</strong>: 2026-05-22 | <strong>累计次数</strong>: 3次</p><p><strong>最后更新</strong>: 2026-06-18 | <strong>数据来源</strong>: 多域系统故障记录表</p><p><strong>适用场景</strong>: 主机软死锁 / OPENAPI 页面、接口或任务异常</p><p><strong>处置目标</strong>: 确认 主机软死锁 的主故障对象，完成恢复动作和业务验证。</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/openapi_host_softlock_topology_marked.png" alt="OPENAPI主机软死锁故障拓扑" /><figcaption>OPENAPI主机软死锁故障拓扑</figcaption></figure><p>图中标注对象为 OPENAPI 在 主机软死锁 场景下的主处理对象和恢复验证对象。处置时先确认主故障点，再扩展到依赖链路和业务验证，避免只根据单个告警对象做局部处理。</p><p>关键对象：</p><ul><li>OPENAPI-09 / OPENAPI-10 / OPENAPI-11：Tomcat 应用节点，主机软死锁主处理对象。</li><li>OPENAPI-01：Nginx / F5 拨测侧对象，恢复后验证入口转发。</li><li>OPENAPI-12：Redis 节点，恢复后作为缓存链路补充验证。</li><li>卓望维护组：负责主机重启与主机层恢复反馈。</li></ul><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>OPENAPI-09/10/11 Tomcat 节点假活或主机软死锁</td><td>采集线程、CPU、日志后重启受影响节点</td><td>OPENAPI Tomcat/应用服务</td></tr><tr><td>蓝框</td><td>F5、Nginx、DB2、Redis 访问验证</td><td>Tomcat 恢复后验证入口、接口和依赖链路</td><td>依赖服务不作为默认重启对象</td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li>主机出现软死锁</li><li>2026年6月18日13:20，OPENAPI系统主机再次出现软死锁现象，系统页面无法访问，API接口调用全部超时无响应，所有依赖OPENAPI接口的上游业务系统数据查询功能中断。本次故障与当日11:20分发生的故障属同类型问题，均为主机软死锁导致。服务台接到用户反馈后上报多域维护组，经排查确认主机软死锁，通知卓望团队协助重启主机恢复服务。</li><li>OPENAPI 服务不可用，疑似主机、节点、内存或操作系统层异常。</li><li>进程可能仍存在但无法响应，需先保留主机现场再恢复。</li><li>恢复后必须验证主机资源、服务进程、页面和接口链路。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>服务不可用且主机响应异常</td><td>保留资源、内核、进程现场</td><td>优先按主机层故障处理</td></tr><tr><td>主机可登录但进程假活</td><td>查资源、D 状态进程和日志</td><td>确认是否需要维护团队重启</td></tr><tr><td>主机恢复后业务仍异常</td><td>复核服务进程、端口和页面</td><td>转入应用链路恢复验证</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>记录告警时间、不可访问入口、API 超时范围和当前主机状态。</li><li>优先保留主机现场，包括 load、CPU、内存、IO wait、D 状态进程和内核日志。</li><li>通知卓望维护组处理 OPENAPI-09 / 10 / 11 主机软死锁并执行主机恢复。</li><li>主机恢复后检查 Tomcat 进程，必要时清理异常进程并启动服务。</li><li>验证 OPENAPI 页面、关键接口、ESBURL 调用日志和入口转发。</li><li>同日复发时升级主机稳定性、存储和单机依赖治理。</li></ol><h2 id="关键检查命令">关键检查命令</h2><p>以下命令已按本故障场景去重整理；每条命令先说明用途，执行前按实际主机、路径、权限和变更流程确认。</p><h3 id="保留主机资源现场">保留主机资源现场</h3><p>用于确认主机是否存在负载、内存、磁盘或 IO wait 异常，优先在重启前采集。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>uptime
+free -h
+df -h
+top -b -n 1 | head -n 30</code></pre></div><h3 id="查看内核和异常进程">查看内核和异常进程</h3><p>用于判断是否存在软死锁、D 状态进程、OOM 或底层存储异常。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>dmesg | tail -n 100
+ps -eo pid,stat,comm,wchan:32 --sort=stat | grep -E &quot; D|tomcat|java&quot; | head -n 50</code></pre></div><h3 id="检查-tomcat-进程">检查 Tomcat 进程</h3><p>主机恢复后执行，确认 Tomcat 是否仍在、是否需要清理异常进程并启动服务。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep tomcat | grep -v grep</code></pre></div><h3 id="查看-openapi-应用日志">查看 OPENAPI 应用日志</h3><p>用于确认主机恢复后是否仍有接口超时、连接失败或外部接口调用异常。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>tail -n 200 /opt/tomcat/apache-tomcat-7.0.77/bin/logs/catalina.$(date +%Y-%m-%d).log</code></pre></div><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><section class="meta-card"><p>OPENAPI 出现 主机软死锁，当前已按手册确认故障对象为 OPENAPI-09 / OPENAPI-10 / OPENAPI-11。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成页面、接口、任务和监控恢复验证。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、现场采集、业务验证</td><td>保留资源和日志现场，跟进恢复验证</td></tr><tr><td>主机 / 平台维护</td><td>主机、节点、内存、系统或集群调度</td><td>执行主机或节点恢复并反馈状态</td></tr><tr><td>开发 / 厂商</td><td>恢复后仍异常的应用链路</td><td>排查服务进程、任务和接口异常</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>完成恢复动作后，按以下顺序验证：</p><ol><li>OPENAPI 关键页面或入口可正常访问。</li><li>相关告警已消除或回落到正常阈值。</li><li>最近日志不再持续出现同类错误关键字。</li><li>主机或节点资源水位恢复正常，无持续 D 状态、OOM 或内核异常。</li><li>服务进程、端口监听、调度状态和业务接口均恢复。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li>直接根因：主机、节点、内存或系统层异常影响服务运行。</li><li>应用表现：页面、接口、任务或容器调度异常，进程可能存在但无法正常响应。</li><li>处置边界：主机恢复后仍需回查应用进程、端口和业务入口。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>建立主机资源、内核告警、节点健康和服务心跳监控。</li><li>固化主机现场保留和恢复后验证流程。</li><li>对反复主机故障推动冗余、迁移或硬件/系统治理。</li></ul><h2 id="历史案例">历史案例</h2><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>57</td><td>2026-05-22 11:45</td><td>主机出现软死锁</td><td>重启主机</td><td>底层存储异常导致主机软死锁</td><td>68min</td></tr><tr><td>68</td><td>2026-06-18 13:20</td><td>OPENAPI 页面不可访问，API 全部超时，确认主机软死锁</td><td>通知卓望团队重启主机</td><td>主机层面软死锁，缺少自动检测恢复，单机无冗余</td><td>36min</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

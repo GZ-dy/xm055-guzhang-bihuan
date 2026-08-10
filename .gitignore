@@ -1,0 +1,45 @@
+# Python environments and caches
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Local credentials and machine-bound state
+.env
+.env.*
+!.env.example
+config/private/*
+!config/private/README.md
+!config/private/feishu.template.json
+!config/private/wecom_bot.env.template
+*.dpapi.json
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Runtime outputs and local logs
+outputs/*
+!outputs/.gitkeep
+work/*
+!work/.gitkeep
+dist/
+backup/
+wheelhouse/
+*.log
+dependency_install.log
+
+# Local workspace and temporary files
+.agents/
+.codex/
+.workbuddy/
+archive/
+~$*
+*.bak
+*.bak-*
+*.backup
+*.backup-*
+*.tmp
+*.temp
+*~

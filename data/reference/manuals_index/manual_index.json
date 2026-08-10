@@ -1,0 +1,1949 @@
+﻿{
+    "generated_at":  "2026-07-08 16:00:31",
+    "project_root":  "data\\reference\\manuals",
+    "manual_dir":  "data\\reference\\manuals\\处理手册",
+    "systems":  [
+                    {
+                        "system":  "BOMC",
+                        "domain":  "B域",
+                        "total_faults":  9,
+                        "aliases":  [
+                                        "BOMC"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\BOMC\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\B域\\BOMC\\BOMC-30443端口冲突与公共模块无法连接.md",
+                                           "domain":  "B域",
+                                           "system":  "BOMC",
+                                           "fault_pattern":  "30443端口冲突与公共模块无法连接",
+                                           "classification":  "网络",
+                                           "count":  1,
+                                           "last_occurrence":  "2026-01-17",
+                                           "symptoms":  [
+
+                                                        ],
+                                           "recovery_actions":  [
+
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"bomc\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status bomc --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/bomc.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "测试链路连通性",
+                                                                       "description":  "用实际目标 IP 或域名替换占位符，检查网络抖动或中断。",
+                                                                       "command":  "ping -c 4 \u003c目标IP或域名\u003e"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看网络会话",
+                                                                       "description":  "确认是否存在大量失败连接、超时或端口不通。",
+                                                                       "command":  "ss -s \u0026\u0026 ss -ant | head -n 40"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "30443",
+                                                            "端口冲突",
+                                                            "端口占用",
+                                                            "公共模块无法连接",
+                                                            "公共模块连接",
+                                                            "公共模块异常",
+                                                            "无法监控",
+                                                            "监控告警",
+                                                            "当前告警"
+                                                        ],
+                                           "match_priority":  10
+                                       },
+                                       {
+                                           "path":  "处理手册\\B域\\BOMC\\BOMC-cas服务异常.md",
+                                           "domain":  "B域",
+                                           "system":  "BOMC",
+                                           "fault_pattern":  "cas服务异常",
+                                           "classification":  "应用",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-06-20",
+                                           "symptoms":  [
+                                                            "2026年6月19日15:13，BOMC系统cas服务出现夯死现象，cas服务进程无响应，web服务关联异常，用户无法正常登录BOMC系统，监控告警页面无法访问，影响运维人员对全网设备的监控和告警处理。经分析，本次故障由代码问题导致cas服务高频故障引发。",
+                                                            "2026年6月20日10:13分，BOMC系统cas服务夯死，系统不可用。"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启cas和web服务",
+                                                                    "重启服务"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"bomc|cas|web\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status bomc --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/bomc.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"bomc|cas|web|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"bomc\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "认证失败",
+                                                            "cas服务",
+                                                            "cas告警",
+                                                            "cas无响应",
+                                                            "CAS异常",
+                                                            "BOMC无法监控",
+                                                            "CAS服务",
+                                                            "CAS服务挂死",
+                                                            "CAS服务异常",
+                                                            "cas异常",
+                                                            "cas无法监控",
+                                                            "无法登录bomc",
+                                                            "bomc登录",
+                                                            "登录bomc",
+                                                            "BOMC监控告警",
+                                                            "cas夯死",
+                                                            "BOMC夯死",
+                                                            "服务异常",
+                                                            "cas进程",
+                                                            "cas服务挂死",
+                                                            "cas挂死",
+                                                            "cas服务夯死",
+                                                            "cas服务进程挂死",
+                                                            "cas服务异常",
+                                                            "cas服务进程",
+                                                            "登录异常",
+                                                            "cas服务无响应",
+                                                            "bomc无法登录",
+                                                            "bomc认证",
+                                                            "单点登录",
+                                                            "CAS服务夯死",
+                                                            "BOMC当前告警",
+                                                            "BOMC cas服务异常"
+                                                        ],
+                                           "match_priority":  20
+                                       },
+                                       {
+                                           "path":  "处理手册\\B域\\BOMC\\BOMC-线程池满.md",
+                                           "domain":  "B域",
+                                           "system":  "BOMC",
+                                           "fault_pattern":  "线程池满",
+                                           "classification":  "应用",
+                                           "count":  5,
+                                           "last_occurrence":  "2026-04-13",
+                                           "symptoms":  [
+                                                            "BOMC页面无法打开"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启cas服务",
+                                                                    "重启cas和web服务"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"bomc|cas|web\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status bomc --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/bomc.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"bomc|cas|web|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"bomc\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "线程池",
+                                                            "线程池满",
+                                                            "线程池耗尽",
+                                                            "bomc卡顿",
+                                                            "bomc慢",
+                                                            "bomc页面慢",
+                                                            "smartbi卡顿",
+                                                            "smartbi慢",
+                                                            "smartbi页面慢",
+                                                            "smartbi无法登录",
+                                                            "连接池",
+                                                            "连接池满",
+                                                            "连接池耗尽",
+                                                            "redis连接池",
+                                                            "夯死",
+                                                            "卡死"
+                                                        ],
+                                           "match_priority":  15
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "CLC业务卡",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "CLC业务卡"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\CLC业务卡\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "IT工单系统",
+                        "domain":  "B域",
+                        "total_faults":  8,
+                        "aliases":  [
+                                        "IT工单系统",
+                                        "system"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\IT工单系统\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\B域\\IT工单系统\\IT工单系统-itsm服务异常.md",
+                                           "domain":  "B域",
+                                           "system":  "IT工单系统",
+                                           "fault_pattern":  "itsm服务异常",
+                                           "classification":  "应用",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-01-07",
+                                           "symptoms":  [
+                                                            "IT工单页面无法打开"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启itsm模块"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"itsm\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status itsm --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/itsm.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"itsm|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"itsm\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "itsm",
+                                                            "itsm服务",
+                                                            "itsm异常",
+                                                            "itsm无法",
+                                                            "工单页面无法打开",
+                                                            "工单系统无法访问",
+                                                            "工单无法访问",
+                                                            "工单页面",
+                                                            "工单系统",
+                                                            "工单打不开",
+                                                            "itsm服务异常",
+                                                            "IT工单系统无法提交工单",
+                                                            "工单系统无法提交",
+                                                            "无法提交工单",
+                                                            "工单提交失败",
+                                                            "工单系统异常",
+                                                            "工单系统服务异常"
+                                                        ],
+                                           "match_priority":  20
+                                       },
+                                       {
+                                           "path":  "处理手册\\B域\\IT工单系统\\IT工单系统-数据库服务器网络服务异常.md",
+                                           "domain":  "B域",
+                                           "system":  "IT工单系统",
+                                           "fault_pattern":  "数据库服务器网络服务异常",
+                                           "classification":  "数据库",
+                                           "count":  4,
+                                           "last_occurrence":  "2026-06-20",
+                                           "symptoms":  [
+                                                            "2026年6月20日10:13分，IT工单系统出现数据库服务宕机，系统不可用。",
+                                                            "2026年6月20日11:13分，IT工单系统数据库服务宕机，系统页面无法正常访问，工单流程中断。故障导致所有依赖IT工单系统的业务工单无法创建、流转和处理，影响范围覆盖全部在用IT工单模块。",
+                                                            "2026年6月20日12:13分，IT工单系统再次出现数据库服务宕机，系统无法正常提供服务。此次为同日第三次数据库服务中断，前两次分别发生于当日10:13至10:59和11:13至12:59。故障影响范围包括IT工单系统的创建、流转、查询等全部业务功能。"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启数据库主机服务，恢复数据库实例运行",
+                                                                    "卓望维护组重启数据库主机服务",
+                                                                    "重启数据库主机服务"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"it\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status it --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/it.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查数据库连接与端口",
+                                                                       "description":  "确认数据库实例端口、连接状态和依赖服务是否正常。",
+                                                                       "command":  "ss -lntp | grep -Ei \"db2|mysql|oracle|redis|1521|3306|50000|6379\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查资源与磁盘",
+                                                                       "description":  "数据库网络服务异常、连接异常常与资源打满或磁盘异常相关。",
+                                                                       "command":  "free -h \u0026\u0026 df -h"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "数据库服务宕机",
+                                                            "数据库宕机",
+                                                            "数据库服务异常",
+                                                            "数据库网络异常",
+                                                            "数据库网络",
+                                                            "db网络",
+                                                            "网路异常",
+                                                            "网路中断",
+                                                            "数据库无法访问",
+                                                            "数据库连不上",
+                                                            "工单系统数据库"
+                                                        ],
+                                           "match_priority":  10
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "OPENAPI",
+                        "domain":  "经分域",
+                        "total_faults":  11,
+                        "aliases":  [
+                                        "OPENAPI",
+                                        "openapi"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\OPENAPI\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\经分域\\OPENAPI\\OPENAPI-主机软死锁.md",
+                                           "domain":  "经分域",
+                                           "system":  "OPENAPI",
+                                           "fault_pattern":  "主机软死锁",
+                                           "classification":  "主机",
+                                           "count":  3,
+                                           "last_occurrence":  "2026-06-18",
+                                           "symptoms":  [
+                                                            "主机出现软死锁",
+                                                            "2026年6月18日13:20，OPENAPI系统主机再次出现软死锁现象，系统页面无法访问，API接口调用全部超时无响应，所有依赖OPENAPI接口的上游业务系统数据查询功能中断。本次故障与当日11:20分发生的故障属同类型问题，均为主机软死锁导致。服务台接到用户反馈后上报多域维护组，经排查确认主机软死锁，通知卓望团队协助重启主机恢复服务。"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启主机",
+                                                                    "通知卓望团队重启主机"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"openapi|api\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status openapi --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/openapi.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看主机资源",
+                                                                       "description":  "先确认 CPU、内存、磁盘是否存在明显瓶颈。",
+                                                                       "command":  "top -b -n 1 | head -n 20 \u0026\u0026 free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看内核日志",
+                                                                       "description":  "硬件、软死锁、OOM 等主机级问题通常会写入内核日志。",
+                                                                       "command":  "dmesg | tail -n 100"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "主机软死锁",
+                                                            "软死锁",
+                                                            "主机宕机",
+                                                            "主机死锁",
+                                                            "主机挂死",
+                                                            "主机无响应",
+                                                            "主机无法访问"
+                                                        ],
+                                           "match_priority":  15
+                                       },
+                                       {
+                                           "path":  "处理手册\\经分域\\OPENAPI\\OPENAPI-数据库服务器网络服务异常.md",
+                                           "domain":  "经分域",
+                                           "system":  "OPENAPI",
+                                           "fault_pattern":  "数据库服务器网络服务异常",
+                                           "classification":  "数据库",
+                                           "count":  6,
+                                           "last_occurrence":  "2026-04-30",
+                                           "symptoms":  [
+                                                            "openapi页面无法访问"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "数据库组处理"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"openapi|api\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status openapi --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/openapi.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查数据库连接与端口",
+                                                                       "description":  "确认数据库实例端口、连接状态和依赖服务是否正常。",
+                                                                       "command":  "ss -lntp | grep -Ei \"db2|mysql|oracle|redis|1521|3306|50000|6379\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查资源与磁盘",
+                                                                       "description":  "数据库网络服务异常、连接异常常与资源打满或磁盘异常相关。",
+                                                                       "command":  "free -h \u0026\u0026 df -h"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "数据库服务宕机",
+                                                            "数据库宕机",
+                                                            "数据库服务异常",
+                                                            "数据库网络异常",
+                                                            "数据库网络",
+                                                            "db网络",
+                                                            "网路异常",
+                                                            "网路中断",
+                                                            "接口成功率为0",
+                                                            "成功率为0",
+                                                            "接口率为0",
+                                                            "接口超时",
+                                                            "openapi无法访问",
+                                                            "openapi异常"
+                                                        ],
+                                           "match_priority":  10
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "PASS系统",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "PASS系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\PASS系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "SmartBI",
+                        "domain":  "经分域",
+                        "total_faults":  3,
+                        "aliases":  [
+                                        "SmartBI",
+                                        "SmatrBI"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\SmartBI\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\经分域\\SmartBI\\SmartBI-线程池满.md",
+                                           "domain":  "经分域",
+                                           "system":  "SmartBI",
+                                           "fault_pattern":  "线程池满",
+                                           "classification":  "其他",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-03-27",
+                                           "symptoms":  [
+                                                            "SmartBI系统卡顿",
+                                                            "SmartBI无法登录"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启后台程序"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"smartbi\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status smartbi --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/smartbi.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看系统资源快照",
+                                                                       "description":  "先建立现场快照，便于判断是服务问题还是环境问题。",
+                                                                       "command":  "uptime \u0026\u0026 free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查关键日志关键字",
+                                                                       "description":  "按实际日志路径替换，快速搜集错误、超时、异常退出信息。",
+                                                                       "command":  "grep -Ei \"error|exception|timeout|oom|fail\" /var/log/smartbi.log | tail -n 50"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "smartbi卡顿",
+                                                            "smartbi无法登录",
+                                                            "smartbi页面无法打开",
+                                                            "smartbi慢",
+                                                            "smartbi异常",
+                                                            "smartbi无法访问",
+                                                            "smartbi打不开",
+                                                            "smartbi报表无法打开",
+                                                            "smartbi报表打不开",
+                                                            "smartbi报表加载失败",
+                                                            "smartbi报表加载不出来",
+                                                            "smartbi报表加载异常",
+                                                            "报表无法打开",
+                                                            "报表打不开",
+                                                            "报表加载失败",
+                                                            "报表加载不出来",
+                                                            "报表加载异常",
+                                                            "报表无法加载"
+                                                        ],
+                                           "match_priority":  15
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "smp",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "smp"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\smp\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "下载中心",
+                        "domain":  "经分域",
+                        "total_faults":  5,
+                        "aliases":  [
+                                        "下载中心"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\下载中心\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\经分域\\下载中心\\下载中心-文件扫描程序卡死.md",
+                                           "domain":  "经分域",
+                                           "system":  "下载中心",
+                                           "fault_pattern":  "文件扫描程序卡死",
+                                           "classification":  "应用",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-06-03",
+                                           "symptoms":  [
+                                                            "扫描程序未完成运行"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启扫描 程序"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"service\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status service --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/service.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"service|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"service\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "文件扫描卡死",
+                                                            "扫描程序未完成运行",
+                                                            "扫描卡死",
+                                                            "文件扫描",
+                                                            "扫描程序",
+                                                            "扫描异常",
+                                                            "下载中心扫描",
+                                                            "下载中心文件下载失败",
+                                                            "文件下载失败",
+                                                            "文件无法下载",
+                                                            "下载失败",
+                                                            "下载不了",
+                                                            "无法下载",
+                                                            "下载异常"
+                                                        ],
+                                           "match_priority":  15
+                                       },
+                                       {
+                                           "path":  "处理手册\\经分域\\下载中心\\下载中心-用户同步程序卡死.md",
+                                           "domain":  "经分域",
+                                           "system":  "下载中心",
+                                           "fault_pattern":  "用户同步程序卡死",
+                                           "classification":  "应用",
+                                           "count":  1,
+                                           "last_occurrence":  "2026-05-11",
+                                           "symptoms":  [
+
+                                                        ],
+                                           "recovery_actions":  [
+
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"service\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status service --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/service.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"service|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"service\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "用户同步程序卡死",
+                                                            "用户同步卡死",
+                                                            "同步卡死",
+                                                            "用户同步",
+                                                            "同步异常",
+                                                            "同步失败",
+                                                            "下载中心同步",
+                                                            "下载中心用户同步失败",
+                                                            "用户同步失败",
+                                                            "用户同步异常",
+                                                            "用户无法同步",
+                                                            "下载用户同步"
+                                                        ],
+                                           "match_priority":  15
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "乡村振兴",
+                        "domain":  "S域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "乡村振兴"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\乡村振兴\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "大数据PaaS平台",
+                        "domain":  "经分域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "大数据PaaS平台"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\大数据PaaS平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "大数据平台K8S集群",
+                        "domain":  "B域",
+                        "total_faults":  2,
+                        "aliases":  [
+                                        "大数据平台K8S集群"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\大数据平台K8S集群\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\B域\\大数据平台K8S集群\\大数据平台K8S集群-主机内存故障.md",
+                                           "domain":  "B域",
+                                           "system":  "大数据平台K8S集群",
+                                           "fault_pattern":  "主机内存故障",
+                                           "classification":  "其他",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-06-02",
+                                           "symptoms":  [
+
+                                                        ],
+                                           "recovery_actions":  [
+
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"k8s\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status k8s --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/k8s.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看系统资源快照",
+                                                                       "description":  "先建立现场快照，便于判断是服务问题还是环境问题。",
+                                                                       "command":  "uptime \u0026\u0026 free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查关键日志关键字",
+                                                                       "description":  "按实际日志路径替换，快速搜集错误、超时、异常退出信息。",
+                                                                       "command":  "grep -Ei \"error|exception|timeout|oom|fail\" /var/log/k8s.log | tail -n 50"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "主机内存故障",
+                                                            "内存故障",
+                                                            "内存溢出",
+                                                            "oom",
+                                                            "k8s内存",
+                                                            "集群内存",
+                                                            "大数据平台内存",
+                                                            "K8S节点故障",
+                                                            "节点故障",
+                                                            "K8S节点",
+                                                            "K8S集群节点",
+                                                            "K8S集群节点故障",
+                                                            "集群节点故障",
+                                                            "节点宕机",
+                                                            "节点异常"
+                                                        ],
+                                           "match_priority":  15
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "实时营销",
+                        "domain":  "经分域",
+                        "total_faults":  5,
+                        "aliases":  [
+                                        "实时营销"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\实时营销\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\经分域\\实时营销\\实时营销-Tomcat服务异常.md",
+                                           "domain":  "经分域",
+                                           "system":  "实时营销",
+                                           "fault_pattern":  "Tomcat服务异常",
+                                           "classification":  "其他",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-05-06",
+                                           "symptoms":  [
+                                                            "后台日志大量报错",
+                                                            "Tomcat服务频繁掉线"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启Tomcat服务",
+                                                                    "删除文件释放内存空间"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"tomcat\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status tomcat --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/tomcat.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看系统资源快照",
+                                                                       "description":  "先建立现场快照，便于判断是服务问题还是环境问题。",
+                                                                       "command":  "uptime \u0026\u0026 free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查关键日志关键字",
+                                                                       "description":  "按实际日志路径替换，快速搜集错误、超时、异常退出信息。",
+                                                                       "command":  "grep -Ei \"error|exception|timeout|oom|fail\" /var/log/tomcat.log | tail -n 50"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "tomcat服务异常",
+                                                            "tomcat掉线",
+                                                            "tomcat报错",
+                                                            "后台日志大量报错",
+                                                            "tomcat挂死",
+                                                            "tomcat异常",
+                                                            "实时营销tomcat",
+                                                            "实时营销活动页面无法打开",
+                                                            "活动页面无法打开",
+                                                            "活动页面打不开",
+                                                            "实时营销活动无法打开",
+                                                            "活动无法打开",
+                                                            "页面无法打开",
+                                                            "页面打不开",
+                                                            "活动页异常",
+                                                            "活动页面异常"
+                                                        ],
+                                           "match_priority":  15
+                                       },
+                                       {
+                                           "path":  "处理手册\\经分域\\实时营销\\实时营销-端口服务异常.md",
+                                           "domain":  "经分域",
+                                           "system":  "实时营销",
+                                           "fault_pattern":  "端口服务异常",
+                                           "classification":  "数据库",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-01-29",
+                                           "symptoms":  [
+                                                            "端口连接数异常"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启Redis,storm服务",
+                                                                    "重启Redis服务"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"redis\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status redis --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/redis.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查数据库连接与端口",
+                                                                       "description":  "确认数据库实例端口、连接状态和依赖服务是否正常。",
+                                                                       "command":  "ss -lntp | grep -Ei \"db2|mysql|oracle|redis|1521|3306|50000|6379\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查资源与磁盘",
+                                                                       "description":  "数据库网络服务异常、连接异常常与资源打满或磁盘异常相关。",
+                                                                       "command":  "free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查 Redis 内存",
+                                                                       "description":  "若涉及 Redis，可快速查看内存占用与淘汰情况。",
+                                                                       "command":  "redis-cli info memory"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "端口服务异常",
+                                                            "端口连接数异常",
+                                                            "端口连接数",
+                                                            "端口异常",
+                                                            "redis服务",
+                                                            "storm服务",
+                                                            "实时营销端口",
+                                                            "实时营销端口异常",
+                                                            "端口连接失败"
+                                                        ],
+                                           "match_priority":  10
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "数字员工",
+                        "domain":  "M域",
+                        "total_faults":  5,
+                        "aliases":  [
+                                        "数字员工"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\数字员工\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\M域\\数字员工\\数字员工-redis内存溢出.md",
+                                           "domain":  "M域",
+                                           "system":  "数字员工",
+                                           "fault_pattern":  "redis内存溢出",
+                                           "classification":  "数据库",
+                                           "count":  3,
+                                           "last_occurrence":  "2026-03-17",
+                                           "symptoms":  [
+                                                            "智能小7打开异常",
+                                                            "移动办公机器人响应返回值异常null"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "调整redis内存空间",
+                                                                    "清理redis过期缓存token腾出内存空间"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"redis\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status redis --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/redis.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查数据库连接与端口",
+                                                                       "description":  "确认数据库实例端口、连接状态和依赖服务是否正常。",
+                                                                       "command":  "ss -lntp | grep -Ei \"db2|mysql|oracle|redis|1521|3306|50000|6379\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查资源与磁盘",
+                                                                       "description":  "数据库网络服务异常、连接异常常与资源打满或磁盘异常相关。",
+                                                                       "command":  "free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查 Redis 内存",
+                                                                       "description":  "若涉及 Redis，可快速查看内存占用与淘汰情况。",
+                                                                       "command":  "redis-cli info memory"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "redis内存溢出",
+                                                            "redis溢出",
+                                                            "redis内存",
+                                                            "redis内存满",
+                                                            "智能小7响应异常null",
+                                                            "智能小7 null",
+                                                            "数字员工任务执行失败",
+                                                            "任务执行失败",
+                                                            "任务执行异常",
+                                                            "任务失败",
+                                                            "任务异常",
+                                                            "数字员工任务",
+                                                            "数字员工执行失败"
+                                                        ],
+                                           "match_priority":  10
+                                       },
+                                       {
+                                           "path":  "处理手册\\M域\\数字员工\\数字员工-接口服务异常.md",
+                                           "domain":  "M域",
+                                           "system":  "数字员工",
+                                           "fault_pattern":  "接口服务异常",
+                                           "classification":  "其他",
+                                           "count":  2,
+                                           "last_occurrence":  "2026-03-13",
+                                           "symptoms":  [
+                                                            "智能小7打开异常",
+                                                            "智能小7提报障单异常"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启snc-digital-employee模块后恢复",
+                                                                    "重启snc-im-chat模块后恢复"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"service\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status service --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/service.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看系统资源快照",
+                                                                       "description":  "先建立现场快照，便于判断是服务问题还是环境问题。",
+                                                                       "command":  "uptime \u0026\u0026 free -h \u0026\u0026 df -h"
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查关键日志关键字",
+                                                                       "description":  "按实际日志路径替换，快速搜集错误、超时、异常退出信息。",
+                                                                       "command":  "grep -Ei \"error|exception|timeout|oom|fail\" /var/log/service.log | tail -n 50"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "智能小7打开异常",
+                                                            "智能小7提报障单异常",
+                                                            "接口服务异常",
+                                                            "接口调用异常",
+                                                            "接口异常",
+                                                            "数字员工接口",
+                                                            "数字员工接口异常",
+                                                            "数字员工服务异常",
+                                                            "智能小7接口异常",
+                                                            "数字员工服务",
+                                                            "智能小7执行失败",
+                                                            "智能小7服务异常"
+                                                        ],
+                                           "match_priority":  10
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "标签库",
+                        "domain":  "经分域",
+                        "total_faults":  2,
+                        "aliases":  [
+                                        "标签库"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\标签库\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "省级业务集中稽核系统",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "省级业务集中稽核系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\省级业务集中稽核系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "自助分析",
+                        "domain":  "经分域",
+                        "total_faults":  11,
+                        "aliases":  [
+                                        "自助分析"
+                                    ],
+                        "readme_path":  "处理手册\\经分域\\自助分析\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\经分域\\自助分析\\自助分析-后台任务进程卡住.md",
+                                           "domain":  "经分域",
+                                           "system":  "自助分析",
+                                           "fault_pattern":  "后台任务进程卡住",
+                                           "classification":  "应用",
+                                           "count":  10,
+                                           "last_occurrence":  "2026-05-06",
+                                           "symptoms":  [
+                                                            "后台跑数任务夯死无法操作",
+                                                            "后台跑数",
+                                                            "后台程序无法运行",
+                                                            "后台程序异常",
+                                                            "自助分析后台无法访问",
+                                                            "自助分析后台跑数",
+                                                            "自助分析后台任务卡死",
+                                                            "自助分析后台程序无法运行"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "重启后台程序"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "查看相关进程",
+                                                                       "description":  "确认相关服务进程是否存活、是否存在重复或僵死进程。",
+                                                                       "command":  "ps -ef | grep -Ei \"service\" | grep -v grep"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看服务状态",
+                                                                       "description":  "若服务由 systemd 管理，可直接确认当前状态与最近报错。",
+                                                                       "command":  "systemctl status service --no-pager"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看最近日志",
+                                                                       "description":  "先看近 200 行日志，快速确认报错关键字与时间点。",
+                                                                       "command":  "tail -n 200 /var/log/service.log"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看监听端口",
+                                                                       "description":  "确认应用端口是否仍在监听，排查服务假死或端口占用。",
+                                                                       "command":  "ss -lntp | grep -Ei \"service|8080|8443\""
+                                                                   },
+                                                                   {
+                                                                       "title":  "检查线程/CPU热点",
+                                                                       "description":  "线程池满、任务堆积类问题可优先看线程和 CPU 占用。",
+                                                                       "command":  "ps -Lp $(pgrep -f \"service\" | head -n 1) -o pid,tid,%cpu,%mem,cmd --sort=-%cpu | head"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "后台跑数任务夯死无法操作",
+                                                            "后台跑数任务夯死",
+                                                            "后台跑数",
+                                                            "后台跑数夯死",
+                                                            "后台跑数卡住",
+                                                            "后台程序无法运行",
+                                                            "后台程序异常",
+                                                            "后台程序",
+                                                            "自助分析后台无法访问",
+                                                            "自助分析后台跑数",
+                                                            "自助分析后台任务卡死",
+                                                            "自助分析后台程序无法运行",
+                                                            "自助分析后台程序",
+                                                            "自助分析跑数",
+                                                            "自助分析后台",
+                                                            "跑数任务",
+                                                            "跑数夯死",
+                                                            "后台任务"
+                                                        ],
+                                           "match_priority":  10
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "自建空充",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "自建空充"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\自建空充\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "集中化工单系统",
+                        "domain":  "B域",
+                        "total_faults":  5,
+                        "aliases":  [
+                                        "集中化工单系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\集中化工单系统\\README.md",
+                        "guides":  [
+                                       {
+                                           "path":  "处理手册\\B域\\集中化工单系统\\集中化工单系统-flow服务假死.md",
+                                           "domain":  "B域",
+                                           "system":  "集中化工单系统",
+                                           "fault_pattern":  "flow服务假死",
+                                           "classification":  "应用",
+                                           "count":  1,
+                                           "last_occurrence":  "2026-07-09",
+                                           "symptoms":  [
+                                                            "用户无法登录集中化工单系统",
+                                                            "flow 服务假死，pod 启动后服务实例未就绪"
+                                                        ],
+                                           "recovery_actions":  [
+                                                                    "修改 pod 健康检查机制"
+                                                                ],
+                                           "common_commands":  [
+                                                                   {
+                                                                       "title":  "列出 flow pod 状态",
+                                                                       "description":  "按 namespace 和标签筛选 flow pod。",
+                                                                       "command":  "kubectl -n \u003cns\u003e get pod -l app=flow -o wide"
+                                                                   },
+                                                                   {
+                                                                       "title":  "查看未就绪 pod 详情",
+                                                                       "description":  "查看 pod 事件和最近状态。",
+                                                                       "command":  "kubectl -n \u003cns\u003e describe pod \u003cpod\u003e"
+                                                                   },
+                                                                   {
+                                                                       "title":  "抓取 flow 最近日志",
+                                                                       "description":  "看错误关键字和启动耗时。",
+                                                                       "command":  "kubectl -n \u003cns\u003e logs -l app=flow --tail=300 --since=30m"
+                                                                   },
+                                                                   {
+                                                                       "title":  "滚动重启 flow",
+                                                                       "description":  "修改探针后滚动重启并观察进度。",
+                                                                       "command":  "kubectl -n \u003cns\u003e rollout restart deployment/flow \u0026\u0026 kubectl -n \u003cns\u003e rollout status deployment/flow"
+                                                                   }
+                                                               ],
+                                           "keywords":  [
+                                                            "flow服务假死",
+                                                            "flow假死",
+                                                            "flow异常",
+                                                            "flow服务异常",
+                                                            "用户无法登录集中化工单系统",
+                                                            "工单系统无法登录",
+                                                            "集中化工单无法登录",
+                                                            "集中化工单系统无法访问",
+                                                            "集中化工单",
+                                                            "集中化工单系统",
+                                                            "集中化工单flow异常",
+                                                            "工单flow服务异常",
+                                                            "flow服务",
+                                                            "flow掉线"
+                                                        ],
+                                           "match_priority":  15
+                                       }
+                                   ]
+                    },
+                    {
+                        "system":  "集中运营 IOP",
+                        "domain":  "B域",
+                        "total_faults":  1,
+                        "aliases":  [
+                                        "集中运营 IOP"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\集中运营 IOP\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "集中运营平台(IOP)",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "集中运营平台(IOP)",
+                                        "集中运营平台",
+                                        "IOP",
+                                        "iop",
+                                        "Iop"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\集中运营平台_IOP\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "集中化工单系统(IWOS)",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "集中化工单系统(IWOS)",
+                                        "集中化工单系统",
+                                        "IWOS",
+                                        "iwos",
+                                        "Iwos"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\集中化工单系统_IWOS\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "事件中心（实时计算）",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "事件中心（实时计算）",
+                                        "事件中心",
+                                        "实时计算"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\事件中心_实时计算\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "IOP（实时营销）",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "IOP（实时营销）",
+                                        "IOP",
+                                        "实时营销",
+                                        "iop",
+                                        "Iop"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\IOP_实时营销\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "收入稽核",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "收入稽核"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\收入稽核\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "网络数据解析",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "网络数据解析"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\网络数据解析\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "自建空充系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "自建空充系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\自建空充系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "全省物资管理系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "全省物资管理系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\全省物资管理系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "市场运营监控中心",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "市场运营监控中心"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\市场运营监控中心\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "主动业务探测",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "主动业务探测"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\主动业务探测\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "智慧公寓",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "智慧公寓"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\智慧公寓\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "智慧康养",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "智慧康养"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\智慧康养\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "业务支撑运营管理系统（Bomc）",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "业务支撑运营管理系统（Bomc）",
+                                        "业务支撑运营管理系统",
+                                        "Bomc",
+                                        "BOMC",
+                                        "bomc"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\业务支撑运营管理系统_Bomc\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "BDC局数据中心",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "BDC局数据中心"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\BDC局数据中心\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "sims业务管理子系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "sims业务管理子系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\sims业务管理子系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "数据安全管控平台",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "数据安全管控平台"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\数据安全管控平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "业务卡管理系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "业务卡管理系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\业务卡管理系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "业务支撑系统安全管理平台(SMP)",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "业务支撑系统安全管理平台(SMP)",
+                                        "业务支撑系统安全管理平台",
+                                        "SMP",
+                                        "smp",
+                                        "Smp"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\业务支撑系统安全管理平台_SMP\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "ITOP应用基础运维平台",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "ITOP应用基础运维平台"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\ITOP应用基础运维平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "自助分析平台",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "自助分析平台"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\自助分析平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "OpenAPI",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "OpenAPI",
+                                        "OPENAPI",
+                                        "openapi",
+                                        "Openapi"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\OpenAPI\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "大数据门户",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "大数据门户"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\大数据门户\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "统一信息平台（EIP/portal）",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "统一信息平台（EIP/portal）",
+                                        "统一信息平台",
+                                        "EIP/portal",
+                                        "EIP/PORTAL",
+                                        "eip/portal",
+                                        "Eip/portal"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\统一信息平台_EIP_portal\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "综合管理支撑平台",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "综合管理支撑平台"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\综合管理支撑平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "UDS",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "UDS",
+                                        "uds",
+                                        "Uds"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\UDS\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "安全管理信息系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "安全管理信息系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\安全管理信息系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "数字档案馆",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "数字档案馆"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\数字档案馆\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "乡村振兴平台",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "乡村振兴平台"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\乡村振兴平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "智慧社区",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "智慧社区"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\智慧社区\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "数字家庭业务运营系统",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "数字家庭业务运营系统"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\数字家庭业务运营系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "新通话",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "新通话"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\新通话\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "采购供应链系统(SCM)",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "采购供应链系统(SCM)",
+                                        "采购供应链系统",
+                                        "SCM",
+                                        "scm",
+                                        "Scm"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\采购供应链系统_SCM\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "项目经理智能操作平台（IMO）",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "项目经理智能操作平台（IMO）",
+                                        "项目经理智能操作平台",
+                                        "IMO",
+                                        "imo",
+                                        "Imo"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\项目经理智能操作平台_IMO\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "人力资源管理平台",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "人力资源管理平台"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\人力资源管理平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "物流信息系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "物流信息系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\物流信息系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "TD物流信息系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "TD物流信息系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\TD物流信息系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "工作号省级平台",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "工作号省级平台"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\工作号省级平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "知识管理平台",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "知识管理平台"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\知识管理平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "数智人系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "数智人系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\数智人系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "量化薪酬管理系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "量化薪酬管理系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\量化薪酬管理系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "E掌通",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "E掌通"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\E掌通\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "PaaS平台",
+                        "domain":  "BI",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "PaaS平台"
+                                    ],
+                        "readme_path":  "处理手册\\BI\\PaaS平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "AI应用平台系统",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "AI应用平台系统"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\AI应用平台系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "新建设项目审计系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "新建设项目审计系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\新建设项目审计系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "法治移动信息平台",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "法治移动信息平台"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\法治移动信息平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "广东党建平台",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "广东党建平台"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\广东党建平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "广东移动纪检监督工作平台(百粤清流)",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "广东移动纪检监督工作平台(百粤清流)",
+                                        "广东移动纪检监督工作平台",
+                                        "百粤清流"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\广东移动纪检监督工作平台_百粤清流\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "嵌入式风险防控预警",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "嵌入式风险防控预警"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\嵌入式风险防控预警\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "行政管理综合应用平台",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "行政管理综合应用平台"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\行政管理综合应用平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "智慧报账系统",
+                        "domain":  "M域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "智慧报账系统"
+                                    ],
+                        "readme_path":  "处理手册\\M域\\智慧报账系统\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "内容运营平台",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "内容运营平台"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\内容运营平台\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "和商务",
+                        "domain":  "B域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "和商务"
+                                    ],
+                        "readme_path":  "处理手册\\B域\\和商务\\README.md",
+                        "guides":  [
+
+                                   ]
+                    },
+                    {
+                        "system":  "移动慧商",
+                        "domain":  "S域",
+                        "total_faults":  0,
+                        "aliases":  [
+                                        "移动慧商"
+                                    ],
+                        "readme_path":  "处理手册\\S域\\移动慧商\\README.md",
+                        "guides":  [
+
+                                   ]
+                    }
+                ]
+}

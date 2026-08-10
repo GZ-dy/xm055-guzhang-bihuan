@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>下载中心 - 用户同步程序卡死 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>下载中心 - 用户同步程序卡死 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/下载中心/下载中心-用户同步程序卡死.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/下载中心/下载中心-用户同步程序卡死.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#执行-sysdmc-自动化预案">执行 sysdmc 自动化预案</a><a class="nav-link nav-level-3" href="#确认-用户同步-任务是否推进">确认 用户同步 任务是否推进</a><a class="nav-link nav-level-3" href="#补充检查程序执行节点">补充检查程序执行节点</a><a class="nav-link nav-level-3" href="#补充检查执行日志">补充检查执行日志</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>下载中心 - 用户同步程序卡死 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 应用 | <strong>所属域</strong>: 经分域 | <strong>首次发生</strong>: - | <strong>累计次数</strong>: 1次</p><p><strong>最后更新</strong>: 2026-05-11 | <strong>数据来源</strong>: 多域系统故障记录表</p><p><strong>适用场景</strong>: 用户同步程序卡死 / 同步任务积压 / 下载中心用户数据同步异常</p><p><strong>处置目标</strong>: 在拓扑中快速定位 <code>10.253.43.13</code> 程序执行节点，通过 BOMC 自动化预案执行 <code>sysdmc</code> 恢复，并完成页面、任务、数据库和厂商确认</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/download_center_sync_stuck_topology_marked.png" alt="下载中心用户同步程序卡死故障处理拓扑" /><figcaption>下载中心用户同步程序卡死故障处理拓扑</figcaption></figure><p>图中标注对象为 下载中心 在 用户同步程序卡死 场景下的主处理对象和恢复验证对象。处置时先确认主故障点，再扩展到依赖链路和业务验证，避免只根据单个告警对象做局部处理。</p><p>关键对象：</p><ul><li>10.253.43.13：ftp / 程序执行节点，默认通过 BOMC 自动化预案执行 sysdmc 恢复。</li><li>10.253.43.44-45：前台应用主备，恢复后验证页面和任务入口。</li><li>10.252.149.105 / 10.252.149.107：数据库依赖，验证任务状态回写和结果落库。</li><li>用户同步任务：恢复后必须确认积压任务继续推进，不只验证页面可访问。</li></ul><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>10.253.43.13 ftp/程序执行节点上用户同步程序卡死</td><td>进入 BOMC 自动化预案执行恢复</td><td><code>sysdmc</code> 自动化预案</td></tr><tr><td>蓝框</td><td>前台应用、数据库和厂商结果确认</td><td>预案成功后验证同步任务推进、结果落库和页面状态</td><td>一般不重启 10.253.43.44-45，除非验证发现前台异常</td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li>亚信修改数据库沉默账号冻结sql</li><li>下载中心用户同步任务长时间不结束，同步队列持续积压。</li><li>页面或结果回写明显延迟，优先定位 10.253.43.13 上的 sysdmc。</li><li>BOMC 自动化预案执行后仍异常时，升级厂商确认补同步结果。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>页面可访问但任务不推进</td><td>在 BOMC 自动化预案中搜索 sysdmc</td><td>优先按程序卡死处理</td></tr><tr><td>预案执行成功但结果仍不更新</td><td>保留执行结果并通知厂商</td><td>进入程序逻辑或数据补处理</td></tr><tr><td>前台或数据库也异常</td><td>扩展验证前台主备和数据库</td><td>确认是否存在依赖链路问题</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>确认故障是否属于用户同步任务不推进，记录发现时间和积压范围。</li><li>登录 BOMC 页面，进入自动化预案并搜索 sysdmc。</li><li>执行对应自动化预案，等待任务返回成功。</li><li>回查下载中心页面、用户同步任务状态和执行结果。</li><li>通知厂商预案已执行完成，并要求厂商确认后续处理结果。</li><li>如仍异常，保留预案结果、页面截图和任务状态后升级厂商分析。</li></ol><h2 id="关键检查命令">关键检查命令</h2><p>以下命令已按本故障场景去重整理；每条命令先说明用途，执行前按实际主机、路径、权限和变更流程确认。</p><h3 id="执行-sysdmc-自动化预案">执行 sysdmc 自动化预案</h3><p>默认通过 BOMC 自动化预案执行，不优先登录主机手工重启；执行完成后保存预案返回结果。</p><div class="code-block"><div class="code-lang">text</div><pre><code>BOMC页面 -&gt; 自动化预案 -&gt; 搜索 sysdmc -&gt; 执行恢复预案 -&gt; 保存执行结果</code></pre></div><h3 id="确认-用户同步-任务是否推进">确认 用户同步 任务是否推进</h3><p>用于恢复后确认积压任务开始下降，避免只看页面可访问就关闭故障。</p><div class="code-block"><div class="code-lang">text</div><pre><code>登录下载中心页面 -&gt; 查看用户同步任务状态 -&gt; 记录积压数量和最新处理时间</code></pre></div><h3 id="补充检查程序执行节点">补充检查程序执行节点</h3><p>只有 BOMC 自动化预案失败、返回异常或厂商要求时再登录 10.253.43.13，确认程序是否仍假活。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep -Ei &quot;scanPy|sysdmc&quot; | grep -v grep
+top -b -n 1 | head -n 30</code></pre></div><h3 id="补充检查执行日志">补充检查执行日志</h3><p>用于确认预案执行后是否仍有连续失败、漏扫、同步失败或结果回写异常。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>grep -Ei &quot;error|exception|timeout|fail|scan|sync&quot; &lt;下载中心日志目录&gt;/*.log | tail -n 100</code></pre></div><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><section class="meta-card"><p>下载中心 出现 用户同步程序卡死，当前已按手册确认故障对象为 10.253.43.13。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成页面、接口、任务和监控恢复验证。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、现场操作、恢复验证</td><td>执行标准处置流程并记录结果</td></tr><tr><td>系统维护 / 厂商</td><td>应用服务、脚本、配置和程序逻辑</td><td>恢复服务并定位反复故障根因</td></tr><tr><td>DBA / 平台支撑</td><td>数据库、中间件、主机和网络依赖</td><td>在扩展验证异常时介入处理</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>完成恢复动作后，按以下顺序验证：</p><ol><li>BOMC 自动化预案执行成功并有明确返回结果。</li><li>用户同步任务开始推进，积压任务逐步下降。</li><li>数据库状态回写或结果落库正常。</li><li>厂商已确认后续扫描/同步结果无异常。</li><li>页面、任务、数据库和厂商确认均完成后再关闭故障。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li>直接根因：sysdmc 程序卡死，导致任务不推进或结果回写延迟。</li><li>应用表现：页面可访问但任务状态、扫描结果或同步结果不更新。</li><li>处置边界：默认通过 BOMC 自动化预案处理 10.253.43.13，不先扩大到前台主备或数据库故障。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>监控任务积压量、程序运行时长、失败次数和结果回写状态。</li><li>将 sysdmc 自动化预案纳入标准应急流程并定期验证。</li><li>与厂商明确补扫、补同步和回归验证闭环。</li></ul><h2 id="历史案例">历史案例</h2><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>归并记录</td><td>2026-05-11</td><td>亚信修改数据库沉默账号冻结sql</td><td>联系厂商回退</td><td>应用</td><td>-</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

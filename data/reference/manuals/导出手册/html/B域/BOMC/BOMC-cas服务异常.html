@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BOMC - cas服务异常 故障处置手册</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>BOMC - cas服务异常 故障处置手册</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/B域/BOMC/BOMC-cas服务异常.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/B域/BOMC/BOMC-cas服务异常.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#故障拓扑">故障拓扑</a><a class="nav-link nav-level-2" href="#故障点标注与恢复对象">故障点标注与恢复对象</a><a class="nav-link nav-level-2" href="#适用范围与故障判定">适用范围与故障判定</a><a class="nav-link nav-level-3" href="#适用范围">适用范围</a><a class="nav-link nav-level-3" href="#判定规则">判定规则</a><a class="nav-link nav-level-2" href="#标准处置流程">标准处置流程</a><a class="nav-link nav-level-2" href="#关键检查命令">关键检查命令</a><a class="nav-link nav-level-3" href="#定位-web-cas-进程-pid">定位 Web/CAS 进程 PID</a><a class="nav-link nav-level-3" href="#结束假活-web-cas-进程">结束假活 Web/CAS 进程</a><a class="nav-link nav-level-3" href="#启动-web-服务">启动 Web 服务</a><a class="nav-link nav-level-3" href="#启动-cas-服务">启动 CAS 服务</a><a class="nav-link nav-level-3" href="#查看-web-cas-日志">查看 Web/CAS 日志</a><a class="nav-link nav-level-3" href="#采集-cas-线程现场">采集 CAS 线程现场</a><a class="nav-link nav-level-2" href="#协同分工与通知口径">协同分工与通知口径</a><a class="nav-link nav-level-3" href="#通知口径">通知口径</a><a class="nav-link nav-level-3" href="#谁负责什么">谁负责什么</a><a class="nav-link nav-level-2" href="#恢复验证清单">恢复验证清单</a><a class="nav-link nav-level-2" href="#根因与预防">根因与预防</a><a class="nav-link nav-level-3" href="#根因判断">根因判断</a><a class="nav-link nav-level-3" href="#长期预防">长期预防</a><a class="nav-link nav-level-2" href="#历史案例">历史案例</a>
+      </aside>
+      <article class="article">
+        <h1>BOMC - cas服务异常 故障处置手册</h1><section class="meta-card"><p><strong>故障分类</strong>: 应用 | <strong>所属域</strong>: B域 | <strong>首次发生</strong>: 2026-06-19 | <strong>累计次数</strong>: 2次</p><p><strong>最后更新</strong>: 2026-06-20 | <strong>数据来源</strong>: 多域系统故障记录表</p><p><strong>适用场景</strong>: cas服务异常 / BOMC 页面、接口或任务异常</p><p><strong>处置目标</strong>: 确认 cas服务异常 的主故障对象，完成恢复动作和业务验证。</p></section><hr /><h2 id="故障拓扑">故障拓扑</h2><figure class="manual-figure"><img src="../../../../assets/bomc_panji_network_topology_cas_marked.png" alt="BOMC磐基服务网络拓扑与故障处理点" /><figcaption>BOMC磐基服务网络拓扑与故障处理点</figcaption></figure><p>图中标注对象为 BOMC 在 cas服务异常 场景下的主处理对象和恢复验证对象。处置时先确认主故障点，再扩展到依赖链路和业务验证，避免只根据单个告警对象做局部处理。</p><p>关键对象：</p><ul><li>10.108.131.68 / 10.108.131.69：WEB 与 CAS 处理主机。</li><li>toptea-web / toptea-cas3：页面访问与认证链路的主恢复对象。</li><li>4A / B域磐基界面：主机侧恢复后仍异常时执行服务单点恢复。</li><li>bomc-toptea-service / bomc-cas-message：磐基侧扩展验证对象。</li></ul><h2 id="故障点标注与恢复对象">故障点标注与恢复对象</h2><p>红框为本次故障优先处理点；恢复后再按蓝框/依赖链路完成验证。</p><table class="doc-table"><thead><tr><th>标注</th><th>故障点/现象</th><th>优先恢复动作</th><th>需要重启/执行的服务</th></tr></thead><tbody><tr><td>红框</td><td>10.108.131.68/69 WEB 与 CAS 主机假活、线程阻塞或登录无响应</td><td>保留必要线程现场后结束旧进程，按先 Web 后 CAS 恢复</td><td><code>toptea-web</code>、<code>toptea-cas3</code></td></tr><tr><td>扩展</td><td>主机侧恢复后 4A/BOMC 入口仍异常</td><td>通过 4A 进入 B域磐基界面执行单点服务恢复</td><td><code>bomc-toptea-service</code>，必要时核查 <code>bomc-cas-message</code></td></tr></tbody></table><section class="meta-card"><p>说明：如果现场服务名、脚本路径与表内名称不一致，以生产主机实际部署和变更审批为准；依赖类故障先恢复依赖，再决定是否重启应用。</p></section><h2 id="适用范围与故障判定">适用范围与故障判定</h2><h3 id="适用范围">适用范围</h3><p>遇到以下任一现象，进入本手册流程处理：</p><ul><li>2026年6月19日15:13，BOMC系统cas服务出现夯死现象，cas服务进程无响应，web服务关联异常，用户无法正常登录BOMC系统，监控告警页面无法访问，影响运维人员对全网设备的监控和告警处理。经分析，本次故障由代码问题导致cas服务高频故障引发。</li><li>2026年6月20日10:13分，BOMC系统cas服务夯死，系统不可用。</li><li>BOMC 登录认证失败、CAS 服务无响应或 Web 服务关联异常。</li><li>ps 能查到 toptea-cas3 或 toptea-web，但登录页、监控告警页仍打不开或持续超时。</li><li>主机侧恢复后仍异常时，需要进入 B域磐基界面做服务单点恢复。</li></ul><h3 id="判定规则">判定规则</h3><table class="doc-table"><thead><tr><th>如果看到</th><th>先做什么</th><th>判断结论</th></tr></thead><tbody><tr><td>页面或接口不可用</td><td>确认进程、端口和最近日志</td><td>先收敛到应用侧还是依赖侧</td></tr><tr><td>进程存在但页面打不开或请求超时</td><td>记录 PID，必要时保留线程现场，再 kill 旧进程并重启</td><td>按服务假活处理，不能只看进程存活</td></tr><tr><td>恢复后仍有告警</td><td>回查页面、接口、日志和监控</td><td>确认是否是假恢复或依赖未恢复</td></tr></tbody></table><h2 id="标准处置流程">标准处置流程</h2><ol><li>记录故障时间、页面现象、登录认证状态和受影响入口。</li><li>登录 10.108.131.68 / 10.108.131.69，通过 ps 定位 toptea-web 与 toptea-cas3 的 PID。</li><li>页面打不开、登录超时或服务无响应时，即使进程仍存在，也按假活处理；先保留必要线程现场，再 kill 旧进程。</li><li>确认旧进程已退出后，按先 Web、后 CAS 的顺序启动服务。</li><li>重启后验证 BOMC 登录页、监控告警页面和核心入口。</li><li>主机侧恢复后仍异常时，通过 4A 进入 B域磐基界面做单点服务恢复。</li><li>短时间复发时保留线程、日志和连接池现场，升级开发定位根因。</li></ol><h2 id="关键检查命令">关键检查命令</h2><p>以下命令已按本故障场景去重整理；每条命令先说明用途，执行前按实际主机、路径、权限和变更流程确认。</p><h3 id="定位-web-cas-进程-pid">定位 Web/CAS 进程 PID</h3><p>页面打不开、登录超时或监控告警页无响应时，ps 结果只用于定位 PID；进程存在不代表服务可用。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>ps -ef | grep -E &quot;toptea-web|toptea-cas3&quot; | grep -v grep</code></pre></div><h3 id="结束假活-web-cas-进程">结束假活 Web/CAS 进程</h3><p>确认页面不可用或请求持续超时后执行；将占位 PID 替换为上一步查到的实际进程号，两台 WEB 主机需分别处理。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>kill -9 &lt;toptea-web_PID&gt;
+kill -9 &lt;toptea-cas3_PID&gt;
+ps -ef | grep -E &quot;toptea-web|toptea-cas3&quot; | grep -v grep</code></pre></div><h3 id="启动-web-服务">启动 Web 服务</h3><p>确认旧的 toptea-web 进程已结束后执行；启动完成后继续回查页面入口和日志。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>cd /toptea/apps/toptea-web/bin
+./startup.sh</code></pre></div><h3 id="启动-cas-服务">启动 CAS 服务</h3><p>确认旧的 toptea-cas3 进程已结束后执行；恢复后必须重新验证登录页和监控告警页。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>cd /toptea/apps/toptea-cas3/bin
+./startup.sh</code></pre></div><h3 id="查看-web-cas-日志">查看 Web/CAS 日志</h3><p>用于确认启动后是否仍有认证失败、连接异常、线程阻塞或连续报错。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>tail -n 200 /toptea/apps/toptea-web/logs/catalina.out
+tail -n 200 /toptea/apps/toptea-cas3/logs/catalina.out</code></pre></div><h3 id="采集-cas-线程现场">采集 CAS 线程现场</h3><p>短时间复发或 CAS 假死时，在重启前尽量采集线程栈，便于开发定位代码级根因。</p><div class="code-block"><div class="code-lang">bash</div><pre><code>PID=$(pgrep -f &quot;toptea-cas3&quot; | head -n 1)
+jstack -l &quot;$PID&quot; &gt; /tmp/bomc_cas_jstack_$(date +%F_%H%M%S).log</code></pre></div><h2 id="协同分工与通知口径">协同分工与通知口径</h2><h3 id="通知口径">通知口径</h3><section class="meta-card"><p>BOMC 出现 cas服务异常，当前已按手册确认故障对象为 10.108.131.68 / 10.108.131.69。请对应责任团队优先处理主故障点，运维侧同步保留现场并完成页面、接口、任务和监控恢复验证。</p></section><h3 id="谁负责什么">谁负责什么</h3><table class="doc-table"><thead><tr><th>角色</th><th>负责范围</th><th>处置动作</th></tr></thead><tbody><tr><td>一线运维</td><td>告警确认、现场操作、恢复验证</td><td>执行标准处置流程并记录结果</td></tr><tr><td>系统维护 / 厂商</td><td>应用服务、脚本、配置和程序逻辑</td><td>恢复服务并定位反复故障根因</td></tr><tr><td>DBA / 平台支撑</td><td>数据库、中间件、主机和网络依赖</td><td>在扩展验证异常时介入处理</td></tr></tbody></table><h2 id="恢复验证清单">恢复验证清单</h2><p>完成恢复动作后，按以下顺序验证：</p><ol><li>BOMC 关键页面或入口可正常访问。</li><li>相关告警已消除或回落到正常阈值。</li><li>最近日志不再持续出现同类错误关键字。</li><li>服务进程、端口和核心接口均恢复正常。</li><li>恢复后至少完成一次关键业务路径验证。</li></ol><h2 id="根因与预防">根因与预防</h2><h3 id="根因判断">根因判断</h3><ul><li>直接根因：BOMC 应用服务出现进程假死、线程池耗尽或认证链路异常。</li><li>应用表现：页面不可用、登录失败、请求超时或监控告警入口异常。</li><li>处置边界：先恢复主处理服务，再扩展检查磐基、数据库或其他依赖。</li></ul><h3 id="长期预防">长期预防</h3><ul><li>增加进程存活、线程池、响应时间和错误率监控。</li><li>固化标准恢复顺序和恢复后业务验证清单。</li><li>对短时间复发问题升级开发或厂商做代码级根因修复。</li></ul><h2 id="历史案例">历史案例</h2><table class="doc-table"><thead><tr><th>序号</th><th>发生时间</th><th>故障现象</th><th>恢复手段</th><th>故障原因</th><th>处理时长</th></tr></thead><tbody><tr><td>63</td><td>2026-06-19 15:13</td><td>...</td><td>重启 <code>toptea-web</code>、`toptea-...</td><td>...</td><td>46min</td></tr><tr><td>64</td><td>2026-06-20 10:13</td><td>...</td><td>重启 <code>toptea-web</code>、`toptea-...</td><td>...</td><td>46min</td></tr></tbody></table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

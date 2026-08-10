@@ -1,0 +1,1644 @@
+{
+  "schema_version": "1.1",
+  "source_excel": "多域系统告警通报联系人-姓名邮箱版.xlsx",
+  "verified_against_excel": "多域系统告警通报联系人-仅姓名版.xlsx",
+  "updated_at": "2026-07-15",
+  "domain_alias": {
+    "B域": "B域",
+    "BI": "经分域",
+    "S域": "S域",
+    "M域": "M域"
+  },
+  "groups": {
+    "xuweiyuan@shsnc.com": {
+      "a_name_zh": "徐伟源",
+      "systems_count": 8,
+      "systems_seq": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "domain_first": "B域"
+    },
+    "luoxinghua@shsnc.com": {
+      "a_name_zh": "罗星华",
+      "systems_count": 7,
+      "systems_seq": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "domain_first": "B域"
+    },
+    "yangwengang@shsnc.com": {
+      "a_name_zh": "杨文刚",
+      "systems_count": 11,
+      "systems_seq": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "domain_first": "B域"
+    },
+    "tanyujie@shsnc.com": {
+      "a_name_zh": "谭宇洁",
+      "systems_count": 10,
+      "systems_seq": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "domain_first": "M域"
+    },
+    "weixing@shsnc.com": {
+      "a_name_zh": "魏星",
+      "systems_count": 7,
+      "systems_seq": [
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "domain_first": "M域"
+    },
+    "wuchengqian@shsnc.com": {
+      "a_name_zh": "吴承谦",
+      "systems_count": 5,
+      "systems_seq": [
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "domain_first": "M域"
+    },
+    "liuhongjin@shsnc.com": {
+      "a_name_zh": "刘鸿津",
+      "systems_count": 10,
+      "systems_seq": [
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59
+      ],
+      "domain_first": "M域"
+    },
+    "chenwenhong@shsnc.com": {
+      "a_name_zh": "陈文宏",
+      "systems_count": 1,
+      "systems_seq": [
+        55
+      ],
+      "domain_first": "M域"
+    }
+  },
+  "systems": [
+    {
+      "seq": 1,
+      "name": "集中运营平台(IOP)",
+      "aliases": [
+        "集中运营平台(IOP)",
+        "集中运营平台",
+        "IOP",
+        "iop",
+        "Iop"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "A",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 2,
+      "name": "IT工单系统",
+      "aliases": [
+        "IT工单系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 3,
+      "name": "集中化工单系统(IWOS)",
+      "aliases": [
+        "集中化工单系统(IWOS)",
+        "集中化工单系统",
+        "IWOS",
+        "iwos",
+        "Iwos"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 4,
+      "name": "事件中心（实时计算）",
+      "aliases": [
+        "事件中心（实时计算）",
+        "事件中心",
+        "实时计算"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 5,
+      "name": "IOP（实时营销）",
+      "aliases": [
+        "IOP（实时营销）",
+        "IOP",
+        "实时营销",
+        "iop",
+        "Iop"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 6,
+      "name": "收入稽核",
+      "aliases": [
+        "收入稽核"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "C",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 7,
+      "name": "网络数据解析",
+      "aliases": [
+        "网络数据解析"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "C",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 8,
+      "name": "标签库",
+      "aliases": [
+        "标签库"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "C",
+      "emails": [
+        "xuweiyuan@shsnc.com",
+        "gongli@shsnc.com",
+        "dangwanli@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "徐伟源",
+        "b": "龚力",
+        "second": "党万利"
+      }
+    },
+    {
+      "seq": 9,
+      "name": "自建空充系统",
+      "aliases": [
+        "自建空充系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "A",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 10,
+      "name": "全省物资管理系统",
+      "aliases": [
+        "全省物资管理系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 11,
+      "name": "市场运营监控中心",
+      "aliases": [
+        "市场运营监控中心"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 12,
+      "name": "省级业务集中稽核系统",
+      "aliases": [
+        "省级业务集中稽核系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 13,
+      "name": "主动业务探测",
+      "aliases": [
+        "主动业务探测"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 14,
+      "name": "智慧公寓",
+      "aliases": [
+        "智慧公寓"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 15,
+      "name": "智慧康养",
+      "aliases": [
+        "智慧康养"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "luoxinghua@shsnc.com",
+        "lindanjia@shsnc.com",
+        "liangguanglue@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "罗星华",
+        "b": "林丹佳",
+        "second": "梁光略"
+      }
+    },
+    {
+      "seq": 16,
+      "name": "业务支撑运营管理系统（Bomc）",
+      "aliases": [
+        "业务支撑运营管理系统（Bomc）",
+        "业务支撑运营管理系统",
+        "Bomc",
+        "BOMC",
+        "bomc"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 17,
+      "name": "BDC局数据中心",
+      "aliases": [
+        "BDC局数据中心"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 18,
+      "name": "sims业务管理子系统",
+      "aliases": [
+        "sims业务管理子系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 19,
+      "name": "数据安全管控平台",
+      "aliases": [
+        "数据安全管控平台"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 20,
+      "name": "业务卡管理系统",
+      "aliases": [
+        "业务卡管理系统",
+        "CLC业务卡",
+        "CLC业务卡系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 21,
+      "name": "业务支撑系统安全管理平台(SMP)",
+      "aliases": [
+        "业务支撑系统安全管理平台(SMP)",
+        "业务支撑系统安全管理平台",
+        "SMP",
+        "smp",
+        "Smp"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 22,
+      "name": "ITOP应用基础运维平台",
+      "aliases": [
+        "ITOP应用基础运维平台"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 23,
+      "name": "自助分析平台",
+      "aliases": [
+        "自助分析平台"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 24,
+      "name": "OpenAPI",
+      "aliases": [
+        "OpenAPI",
+        "OPENAPI",
+        "openapi",
+        "Openapi"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 25,
+      "name": "下载中心",
+      "aliases": [
+        "下载中心"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "C",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 26,
+      "name": "大数据门户",
+      "aliases": [
+        "大数据门户"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "B",
+      "emails": [
+        "yangwengang@shsnc.com",
+        "gaozhe@shsnc.com",
+        "shenjunyu@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "杨文刚",
+        "b": "高喆",
+        "second": "沈俊羽"
+      }
+    },
+    {
+      "seq": 27,
+      "name": "统一信息平台（EIP/portal）",
+      "aliases": [
+        "统一信息平台（EIP/portal）",
+        "统一信息平台",
+        "EIP/portal",
+        "EIP/PORTAL",
+        "eip/portal",
+        "Eip/portal"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 28,
+      "name": "综合管理支撑平台",
+      "aliases": [
+        "综合管理支撑平台"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 29,
+      "name": "UDS",
+      "aliases": [
+        "UDS",
+        "uds",
+        "Uds"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 30,
+      "name": "安全管理信息系统",
+      "aliases": [
+        "安全管理信息系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 31,
+      "name": "数字档案馆",
+      "aliases": [
+        "数字档案馆"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 32,
+      "name": "乡村振兴平台",
+      "aliases": [
+        "乡村振兴平台"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 33,
+      "name": "智慧社区",
+      "aliases": [
+        "智慧社区"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 34,
+      "name": "数字家庭业务运营系统",
+      "aliases": [
+        "数字家庭业务运营系统"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 35,
+      "name": "新通话",
+      "aliases": [
+        "新通话"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "S",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 36,
+      "name": "采购供应链系统(SCM)",
+      "aliases": [
+        "采购供应链系统(SCM)",
+        "采购供应链系统",
+        "SCM",
+        "scm",
+        "Scm"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "tanyujie@shsnc.com",
+        "lintingyuan@shsnc.com",
+        "ganlueyulong@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "谭宇洁",
+        "b": "林挺源",
+        "second": "甘裕隆"
+      }
+    },
+    {
+      "seq": 37,
+      "name": "项目经理智能操作平台（IMO）",
+      "aliases": [
+        "项目经理智能操作平台（IMO）",
+        "项目经理智能操作平台",
+        "IMO",
+        "imo",
+        "Imo"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 38,
+      "name": "人力资源管理平台",
+      "aliases": [
+        "人力资源管理平台"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 39,
+      "name": "物流信息系统",
+      "aliases": [
+        "物流信息系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 40,
+      "name": "TD物流信息系统",
+      "aliases": [
+        "TD物流信息系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 41,
+      "name": "工作号省级平台",
+      "aliases": [
+        "工作号省级平台"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "S",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 42,
+      "name": "知识管理平台",
+      "aliases": [
+        "知识管理平台"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "闫华垒",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 43,
+      "name": "数智人系统",
+      "aliases": [
+        "数智人系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "weixing@shsnc.com",
+        "yanhualei@shsnc.com",
+        "yanhualei@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "魏星",
+        "b": "闫华垒",
+        "second": "闫华垒"
+      }
+    },
+    {
+      "seq": 44,
+      "name": "量化薪酬管理系统",
+      "aliases": [
+        "量化薪酬管理系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "wuchengqian@shsnc.com",
+        "chenhang@shsnc.com",
+        "shenzeren@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "吴承谦",
+        "b": "陈航",
+        "second": "沈泽人"
+      }
+    },
+    {
+      "seq": 45,
+      "name": "E掌通",
+      "aliases": [
+        "E掌通"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "wuchengqian@shsnc.com",
+        "chenhang@shsnc.com",
+        "shenzeren@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "吴承谦",
+        "b": "陈航",
+        "second": "沈泽人"
+      }
+    },
+    {
+      "seq": 46,
+      "name": "SmartBI",
+      "aliases": [
+        "SmartBI",
+        "SMARTBI",
+        "smartbi",
+        "Smartbi",
+        "SmatrBI"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "wuchengqian@shsnc.com",
+        "chenhang@shsnc.com",
+        "shenzeren@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "吴承谦",
+        "b": "陈航",
+        "second": "沈泽人"
+      }
+    },
+    {
+      "seq": 47,
+      "name": "PaaS平台",
+      "aliases": [
+        "PaaS平台"
+      ],
+      "domain_excel": "BI",
+      "domain_feishu": "经分域",
+      "level": "A",
+      "emails": [
+        "wuchengqian@shsnc.com",
+        "chenhang@shsnc.com",
+        "shenzeren@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "吴承谦",
+        "b": "陈航",
+        "second": "沈泽人"
+      }
+    },
+    {
+      "seq": 48,
+      "name": "AI应用平台系统",
+      "aliases": [
+        "AI应用平台系统"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "wuchengqian@shsnc.com",
+        "chenhang@shsnc.com",
+        "shenzeren@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "吴承谦",
+        "b": "陈航",
+        "second": "沈泽人"
+      }
+    },
+    {
+      "seq": 49,
+      "name": "新建设项目审计系统",
+      "aliases": [
+        "新建设项目审计系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 50,
+      "name": "法治移动信息平台",
+      "aliases": [
+        "法治移动信息平台"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 51,
+      "name": "广东党建平台",
+      "aliases": [
+        "广东党建平台"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 52,
+      "name": "广东移动纪检监督工作平台(百粤清流)",
+      "aliases": [
+        "广东移动纪检监督工作平台(百粤清流)",
+        "广东移动纪检监督工作平台",
+        "百粤清流"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 53,
+      "name": "嵌入式风险防控预警",
+      "aliases": [
+        "嵌入式风险防控预警"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "C",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "chenwenhong@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "陈文宏",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 54,
+      "name": "数字员工",
+      "aliases": [
+        "数字员工"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "chenwenhong@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "陈文宏",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 55,
+      "name": "行政管理综合应用平台",
+      "aliases": [
+        "行政管理综合应用平台"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "A",
+      "emails": [
+        "chenwenhong@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "陈文宏",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 56,
+      "name": "智慧报账系统",
+      "aliases": [
+        "智慧报账系统"
+      ],
+      "domain_excel": "M域",
+      "domain_feishu": "M域",
+      "level": "B",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "chenwenhong@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "陈文宏",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 57,
+      "name": "内容运营平台",
+      "aliases": [
+        "内容运营平台"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "B",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 58,
+      "name": "和商务",
+      "aliases": [
+        "和商务"
+      ],
+      "domain_excel": "B域",
+      "domain_feishu": "B域",
+      "level": "B",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "chenwenhong@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "陈文宏",
+        "second": "杨根发"
+      }
+    },
+    {
+      "seq": 59,
+      "name": "移动慧商",
+      "aliases": [
+        "移动慧商"
+      ],
+      "domain_excel": "S域",
+      "domain_feishu": "S域",
+      "level": "S",
+      "emails": [
+        "liuhongjin@shsnc.com",
+        "huangfufang@shsnc.com",
+        "yanggenfa@shsnc.com"
+      ],
+      "roles": [
+        "一线A角",
+        "一线B角",
+        "二线A角"
+      ],
+      "zh_names": {
+        "a": "刘鸿津",
+        "b": "黄富芳",
+        "second": "杨根发"
+      }
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+digraph BOMC_Original_Topology_Review {
+  graph [
+    rankdir=LR,
+    bgcolor="white",
+    pad="0.25",
+    nodesep="0.45",
+    ranksep="0.70",
+    fontname="Microsoft YaHei",
+    label="BOMC 原始拓扑故障处理标注图（审查版）",
+    labelloc=t,
+    fontsize=20
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Microsoft YaHei",
+    fontsize=11,
+    fillcolor="#f8fafc",
+    color="#94a3b8",
+    margin="0.10,0.06"
+  ];
+
+  edge [
+    color="#475569",
+    penwidth=1.6,
+    arrowsize=0.8
+  ];
+
+  subgraph cluster_tabs {
+    label="BOMC 模块入口";
+    color="transparent";
+    res_mgr [label="资源管理", fillcolor="#eef2d9", color="#7c8760"];
+    mon_mgr [label="监控管理", fillcolor="#eef2d9", color="#7c8760"];
+    ops_ana [label="运营分析", fillcolor="#eef2d9", color="#7c8760"];
+    pub_mgr [label="公共管理", fillcolor="#fff7ed", color="#d97706", penwidth=2];
+    biz_mgr [label="业务管理", fillcolor="#eef2d9", color="#7c8760"];
+    ctl_mgr [label="操控管理", fillcolor="#eef2d9", color="#7c8760"];
+    collect_srv [label="采集服务", fillcolor="#eef2d9", color="#7c8760"];
+    { rank=same; res_mgr mon_mgr ops_ana pub_mgr biz_mgr ctl_mgr collect_srv; }
+  }
+
+  foura [label="4A", shape=component, fillcolor="#edf7d8", color="#8ca56a"];
+  nginx [label="nginx软负载\n均衡器:8080", fillcolor="#e8f3c7", color="#8ca56a"];
+
+  web1 [label="10*.68\nWEB1", fillcolor="#f8fafc", color="#94a3b8"];
+  web2 [label="10*.69\nWEB2", fillcolor="#f8fafc", color="#94a3b8"];
+  host_note [shape=note, color="#d21f3c", fillcolor="#fff1f2", label="主机处理对象\n10*.68 WEB1\n10*.69 WEB2\ntoptea-cas3 / toptea-web"];
+
+  subgraph cluster_panji {
+    label="磐基 10.108.158.0/24 / 10.108.157.0/24";
+    color="#cbd5e1";
+    style="rounded";
+    casmsg [label="cas-message"];
+    commonjob [label="bomc-common-jobservice"];
+    ctlm [label="ctlm"];
+    platform [label="platform"];
+    sysm [label="sysm"];
+    sysm_checker [label="sysm-checker"];
+    resm [label="resm"];
+    indicator [label="indicator"];
+    resm_rest [label="resm-rest"];
+    common [label="common"];
+    sysm_rest [label="sysm-rest"];
+    sched_web [label="sche-web"];
+    ccp2 [label="ccp2"];
+    ccp1 [label="ccp1"];
+  }
+
+  public_service [label="磐基重点说明\n主机恢复后进入4A / B域磐基界面\n公共管理 -> bomc-toptea-service\nCAS异常 / 连接池满优先核查该服务状态", fillcolor="#fff7ed", color="#d97706", penwidth=2];
+
+  subgraph cluster_data {
+    label="数据与中间件";
+    color="#cbd5e1";
+    style="rounded";
+    datanode [label="DATANODE1-3\nFDFS / DATANODE\n743 / 17474"];
+    app13 [label="APP1-3\nRedis 6380/6381\nZookeeper 12181", fillcolor="#eff6ff", color="#2563eb"];
+    db12 [label="DB1-2\n库: toptea / sysm-sd\n3306", fillcolor="#eff6ff", color="#2563eb", penwidth=2];
+    kafka [label="KAFKA1-3\n9092"];
+    dgms [label="DGMS1-3"];
+  }
+
+  subgraph cluster_ext {
+    label="采集与外部依赖";
+    color="#cbd5e1";
+    style="rounded";
+    bomc_ccp [label="BOMC-CCP1-6\n10.108.131.85-90"];
+    namenode [label="NAMENODE2\n10.108.131.71 / 72"];
+    gr14 [label="GR1-4\n集团考核 / CAPES / GDC-IOP\n10.108.131.94-97"];
+  }
+
+  subgraph cluster_roles {
+    label="按角色定制操作命令";
+    color="#d6dde8";
+    style="rounded";
+    ops_cmd [shape=note, color="#d97706", fillcolor="#fff7ed", label="运维\n1. ps -ef | grep -E \"toptea-cas3|toptea-web\"\n2. kill -9 <PID>\n3. cd /toptea/apps/toptea-cas3/bin && ./startup.sh\n4. cd /toptea/apps/toptea-web/bin && ./startup.sh\n5. tail -f /toptea/apps/toptea-cas3/logs/catalina.out"];
+    dev_cmd [shape=note, color="#2563eb", fillcolor="#eff6ff", label="开发\n1. tail -f /toptea/apps/toptea-web/logs/catalina.out\n2. grep -E \"ERROR|Exception|连接池|线程池|CAS\" catalina.out\n3. 结合认证链路和日志定位根因"];
+    dba_cmd [shape=note, color="#7c3aed", fillcolor="#f5f3ff", label="DBA\n1. 核查 DB1-2 的连接数、慢SQL、阻塞会话\n2. mysql -h 10.108.131.113 -P 3306 -u <user> -p -e \"show full processlist;\"\n3. mysql -h 10.108.131.113 -P 3306 -u <user> -p -e \"show status like 'Threads_connected';\""];
+    { rank=same; ops_cmd dev_cmd dba_cmd; }
+  }
+
+  foura -> nginx;
+  nginx -> web1;
+  nginx -> web2;
+  host_note -> web1 [color="#d21f3c", penwidth=2];
+  host_note -> web2 [color="#d21f3c", penwidth=2];
+  web1 -> common [color="#64748b"];
+  web2 -> common [color="#64748b"];
+
+  pub_mgr -> public_service [color="#d97706", penwidth=2];
+  public_service -> common [color="#d97706", penwidth=2];
+
+  common -> datanode [color="#64748b"];
+  common -> app13 [color="#64748b"];
+  common -> db12 [color="#64748b"];
+  common -> kafka [color="#64748b"];
+  ccp1 -> bomc_ccp [color="#64748b"];
+  bomc_ccp -> namenode;
+  bomc_ccp -> gr14;
+  kafka -> dgms;
+}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自助分析 运维总览与故障处理索引</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --card: #fffdfa;
+      --ink: #1f2a37;
+      --muted: #5b6472;
+      --line: #d7ccb6;
+      --accent: #7b4b2a;
+      --accent-soft: #efe4d5;
+      --code-bg: #17212b;
+      --code-ink: #f4f7fb;
+      --shadow: 0 18px 45px rgba(76, 52, 32, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(123, 75, 42, 0.14), transparent 24%),
+        linear-gradient(180deg, #fcf8f1 0%, #f4eee3 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 253, 250, 0.92);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .actions a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--accent-soft);
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      background: rgba(255, 253, 250, 0.9);
+      box-shadow: var(--shadow);
+    }
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+    .nav-link {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed rgba(123, 75, 42, 0.09);
+    }
+    .nav-level-3 { padding-left: 12px; }
+    .nav-level-4 { padding-left: 24px; }
+    .article {
+      padding: 26px 30px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(123, 75, 42, 0.12);
+      box-shadow: var(--shadow);
+    }
+    .meta-card {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fdf8ef 0%, #f7efe3 100%);
+      border-left: 5px solid var(--accent);
+      color: var(--muted);
+    }
+    .meta-card p { margin: 6px 0; }
+    h1, h2, h3, h4 {
+      color: #2f2218;
+      scroll-margin-top: 18px;
+    }
+    h2 {
+      margin-top: 28px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(123, 75, 42, 0.14);
+      font-size: 24px;
+    }
+    h3 {
+      margin-top: 22px;
+      font-size: 18px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(24, 39, 75, 0.08);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    .code-block {
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    .code-lang {
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.85);
+    }
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.65;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .manual-figure {
+      margin: 20px 0 24px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(123, 75, 42, 0.14);
+      background: #fffaf2;
+    }
+    .manual-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+    .manual-figure figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .missing-image {
+      color: #9f1239;
+      font-weight: 700;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+    .doc-table th,
+    .doc-table td {
+      border: 1px solid rgba(123, 75, 42, 0.16);
+      padding: 10px 12px;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-table th {
+      background: #f1e5d3;
+      text-align: left;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(123, 75, 42, 0.16);
+      margin: 24px 0;
+    }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .article { padding: 22px 18px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>自助分析 运维总览与故障处理索引</h1>
+        <p>HTML 版处理手册，适合快速打开、浏览和页面内搜索。</p>
+      </div>
+      <div class="actions">
+        <a href="../../../手册导航.html">返回手册导航</a>
+        <a href="../../../docx/经分域/自助分析/README.docx">打开 DOCX</a>
+        <a href="../../../../处理手册/经分域/自助分析/README.md">打开 Markdown</a>
+      </div>
+    </section>
+    <section class="layout">
+      <aside class="toc">
+        <h2>快速定位</h2>
+        <a class="nav-link nav-level-2" href="#系统概览">系统概览</a><a class="nav-link nav-level-3" href="#处理原则">处理原则</a><a class="nav-link nav-level-2" href="#网络拓扑">网络拓扑</a><a class="nav-link nav-level-2" href="#重点故障点与处置边界">重点故障点与处置边界</a><a class="nav-link nav-level-2" href="#角色分工">角色分工</a><a class="nav-link nav-level-3" href="#运维">运维</a><a class="nav-link nav-level-3" href="#dba">DBA</a><a class="nav-link nav-level-3" href="#开发">开发</a><a class="nav-link nav-level-2" href="#运维提醒">运维提醒</a><a class="nav-link nav-level-2" href="#指引列表">指引列表</a><a class="nav-link nav-level-2" href="#本月高频关注">本月高频关注</a>
+      </aside>
+      <article class="article">
+        <h1>自助分析 运维总览与故障处理索引</h1><section class="meta-card"><p><strong>所属域</strong>: 经分域 | <strong>累计故障</strong>: 11次 | <strong>指引数量</strong>: 1篇</p></section><h2 id="系统概览">系统概览</h2><p>自助分析的高频故障集中在后台任务调度与跑数服务卡住，问题通常表现为任务长时间停留在执行中，页面可访问但结果迟迟不返回；恢复动作通过 BOMC 自动化预案执行。</p><ul><li>服务范围：覆盖页面入口、后台调度进程、任务队列以及数据库、缓存、文件目录等依赖链路。</li></ul><h3 id="处理原则">处理原则</h3><ol><li>跑数服务恢复通过 BOMC 自动化预案执行，不默认登录主机手工重启后台程序。</li><li>恢复动作完成后必须同时验证历史卡住任务和新提交任务，不接受只恢复表面可用性。</li><li>若同日连续复发，应升级为代码或依赖专项问题，不再只以重启结项。</li></ol><h2 id="网络拓扑">网络拓扑</h2><figure class="manual-figure"><img src="../../../../assets/self_analysis_network_topology.png" alt="自助分析系统功能拓扑图" /><figcaption>自助分析系统功能拓扑图</figcaption></figure><section class="meta-card"><p>红框为当前需处理的 10.253.43.59 后台任务进程组，蓝框为前端主备、DTS、DB2 与日志链路联动验证区。</p></section><h2 id="重点故障点与处置边界">重点故障点与处置边界</h2><table class="doc-table"><thead><tr><th>故障类型</th><th>重点位置</th><th>处置边界</th><th>验证要求</th></tr></thead><tbody><tr><td>后台任务进程卡住</td><td>BOMC 自动化预案 / 10.253.43.59</td><td>通过 BOMC 自动化预案重启自助分析跑数服务；主机侧进程检查只作为预案失败后的补充动作。</td><td>验证预案执行成功、历史卡住任务继续推进、新任务可正常完成、日志无持续阻塞。</td></tr></tbody></table><h2 id="角色分工">角色分工</h2><h3 id="运维">运维</h3><ul><li>负责范围：BOMC 自动化预案、页面、任务状态、日志与依赖检查</li><li>处置动作：</li></ul><ol><li>确认是单任务卡死还是整个调度进程卡死。</li><li>通过 BOMC 自动化预案执行跑数服务重启。</li><li>恢复后验证历史任务与新任务都可继续执行。</li></ol><h3 id="dba">DBA</h3><ul><li>负责范围：数据库锁等待、慢 SQL 与连接问题</li><li>处置动作：</li></ul><ol><li>配合确认是否存在锁等待、慢 SQL 或连接阻塞。</li><li>回查任务落库、回写和事务状态。</li><li>协助排除数据库侧引起的任务卡死。</li></ol><h3 id="开发">开发</h3><ul><li>负责范围：调度逻辑、线程池、重试与幂等控制</li><li>处置动作：</li></ul><ol><li>定位任务卡死的代码路径、重试逻辑和队列阻塞根因。</li><li>完善超时中断、失败重试上限和僵死任务清理机制。</li><li>推动任务链路监控和自动恢复能力建设。</li></ol><h2 id="运维提醒">运维提醒</h2><ul><li>自助分析建议补充任务 ID、任务类型、依赖资源三个维度的现场信息模板。</li><li>自助分析跑数服务重启入口统一放在 BOMC 自动化预案，主机侧处理只作为预案失败后的补充排查。</li><li>后续若补齐主机命名与部署信息，可继续把拓扑从功能视图升级为网络视图。</li></ul><h2 id="指引列表">指引列表</h2><table class="doc-table"><thead><tr><th>序号</th><th>故障模式</th><th>分类</th><th>发生次数</th><th>最近发生</th></tr></thead><tbody><tr><td>1</td><td>后台任务进程卡住</td><td>应用</td><td>10</td><td>2026-05-06</td></tr></tbody></table><h2 id="本月高频关注">本月高频关注</h2><ul><li>后台任务进程卡住：累计 10 次，最近发生于 2026-05-06</li></ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
