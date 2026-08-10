@@ -80,7 +80,7 @@ cd guzhangchulin
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\build_portable_release.ps1
 ```
 
-默认便携包不包含 `.venv`、真实飞书配置、企业微信/SMTP 凭据、历史运行数据和缓存。换机与人员交接都应以 [交接操作手册](docs/HANDOVER_OPERATIONS.md) 的“先停旧端、再启新端”顺序为准；[新电脑续跑说明](MIGRATE_TO_NEW_PC.md) 仅作为环境重建补充。
+默认便携包不包含 `.venv`、真实飞书配置、企业微信/SMTP 凭据、历史运行数据和缓存。换机与人员交接都应以 [交接操作手册](docs/HANDOVER_OPERATIONS.md) 的“先停旧端、再启新端”顺序为准。
 
 ## 5 分钟安全体验
 
@@ -276,7 +276,6 @@ $python = ".\.venv\Scripts\python.exe"
 |---|---|
 | [AGENTS.md](AGENTS.md) | 项目接手、业务边界和代理执行规则 |
 | [docs/HANDOVER_OPERATIONS.md](docs/HANDOVER_OPERATIONS.md) | 人员交接、切换、验收、值守与回退 |
-| [MIGRATE_TO_NEW_PC.md](MIGRATE_TO_NEW_PC.md) | 新电脑环境重建补充；正式切换顺序以交接手册为准 |
 | [docs/LOCAL_RUN.md](docs/LOCAL_RUN.md) | Windows 本地运行与机器人排障 |
 | [docs/WECOM_BOT.md](docs/WECOM_BOT.md) | 企业微信机器人接入 |
 | [docs/OUTPUT_POLICY.md](docs/OUTPUT_POLICY.md) | 正式、临时和历史产物边界 |
