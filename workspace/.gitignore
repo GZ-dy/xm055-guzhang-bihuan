@@ -1,0 +1,17 @@
+﻿__pycache__/
+*.pyc
+*.pyo
+.env
+.agents/
+.codex/
+node_modules/
+config/private/*
+!config/private/README.md
+!config/private/feishu.template.json
+!config/private/wecom_bot.env.template
+work/cases/_message_registry.sqlite3*
+archive/historical_outputs/**
+archive/distributions/**
+archive/legacy/**
+!archive/legacy/
+!archive/legacy/README.md

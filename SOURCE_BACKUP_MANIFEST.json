@@ -1,0 +1,536 @@
+{
+  "project": "fault",
+  "title": "故障报告及闭环",
+  "repo": "GZ-dy/duoyu-fault-closed-loop",
+  "date": "2026-10-10",
+  "source_roots": {
+    "workspace-archive": "F:\\历史资料\\Codex工作区\\工作区整理\\2026-10-02_173003\\历史项目压缩包\\protect10_故障闭环.zip",
+    "downloaded-recovery": "D:\\C\\下载\\故障报告系统",
+    "business-reports": "F:\\历史资料\\Codex工作区\\旧工作区\\03_交付成果\\故障报告与记录表"
+  },
+  "datasets": [
+    {
+      "source": "F:\\CODEX工作区\\本机电脑\\2026-10-10\\cmtoken-4acrt-ai-iwos-s-maxai\\work\\backup-20261010\\extracted\\fault\\protect10_故障闭环",
+      "copied": [
+        {
+          "path": ".gitignore",
+          "sha256": "8f7ffc1e290d52d512c8754b9bb060389b946b79203e7d84cdf5384d6e484a51",
+          "size": 337
+        },
+        {
+          "path": "AGENTS.md",
+          "sha256": "376fc60e6fb6ed723572b8981f29e127ec5afbf383d3c536bf538574079da154",
+          "size": 3174
+        },
+        {
+          "path": "connect_only.ps1",
+          "sha256": "202e3fd61f0a84abc53de1ad9fab52b978988a809516c2611c960d03508d8da2",
+          "size": 3456
+        },
+        {
+          "path": "diagnose_bot.ps1",
+          "sha256": "edb08d2515cdd1847805f10142d240becaf80235fa10862976aca965cf3e2b74",
+          "size": 6533
+        },
+        {
+          "path": "HERMES_故障闭环执行规则.md",
+          "sha256": "5ef612c539466d2d4b7f74c7c849b5567c3586349d212b82b0669b40e5fa8a53",
+          "size": 5373
+        },
+        {
+          "path": "INSTALL_DEPENDENCIES.bat",
+          "sha256": "71519e380b2e32a29eaa0f47f3a70e30b8093401b88ae303e4aa149aab64d8dd",
+          "size": 670
+        },
+        {
+          "path": "INSTALL_DEPENDENCIES.ps1",
+          "sha256": "6fa6f08d55d29f126f4adfb070c9761c0daf37a231ef717101bce83ea9124b50",
+          "size": 7803
+        },
+        {
+          "path": "install_env.bat",
+          "sha256": "39295e166be4d933d05051d8c59991d34219e15c8b56b73eacc63f5171095e07",
+          "size": 119
+        },
+        {
+          "path": "install_env.ps1",
+          "sha256": "8e657b143295bbdeacb5fb5aba3f4b741c30c7fba1c973db0fa1b4479e1ee966",
+          "size": 4058
+        },
+        {
+          "path": "install_wecom_bot_autostart.ps1",
+          "sha256": "9109478f7ae8c8f96a78fa62130905f8b40ee2840d04940a0d28ae13208533ec",
+          "size": 3671
+        },
+        {
+          "path": "MIGRATE_TO_NEW_PC.md",
+          "sha256": "764d54225acc0cf97d658eebea3f80f0eeeaa05821d76e7d00e9276513770f15",
+          "size": 2827
+        },
+        {
+          "path": "NEW_PC_SETUP.bat",
+          "sha256": "b45c2d0e51b602b35ffe06b8b98340f9a9f538c866f5e53ccfc5b1e525545def",
+          "size": 111
+        },
+        {
+          "path": "NEW_PC_SETUP.ps1",
+          "sha256": "f44c9dc6ddce7a26ccd65c665f599fb5ba985b15a0eb8d03aff08fe41d5c8633",
+          "size": 2944
+        },
+        {
+          "path": "ONE_CLICK_NEW_PC.bat",
+          "sha256": "250edac5e816c69b523c885546e8e256c38a376f946892f7554b2999fb1f76b3",
+          "size": 921
+        },
+        {
+          "path": "README.md",
+          "sha256": "a4ad77197c47cb9b02bf24dc34f8e8193287ab479742844179823b142a4f254e",
+          "size": 17953
+        },
+        {
+          "path": "README_DEPENDENCIES.md",
+          "sha256": "55f89ce3ed6410efa2f77899e5219e9ea35b77ba5ef08e1d9c7ce98e20748445",
+          "size": 1813
+        },
+        {
+          "path": "RECOVER_AFTER_REBOOT.cmd",
+          "sha256": "e490b65a903b1bceee4616c6ea405822fce86cef9a5418e09ed36ed600bc90f6",
+          "size": 635
+        },
+        {
+          "path": "recover_after_reboot.ps1",
+          "sha256": "50ce2a41ddf3e5ad95c46c598db4a1f54f984a836a8718af0bb6dbec54bfc939",
+          "size": 26634
+        },
+        {
+          "path": "requirements-wecom.txt",
+          "sha256": "a74ecd9e3c031576bd80ee4a60e8b396443059e160738eff4d0eb2f768f24102",
+          "size": 71
+        },
+        {
+          "path": "requirements.txt",
+          "sha256": "9f61db43aa526a5583384c69ed60199204b425853c701f36aa0bf28753858d12",
+          "size": 930
+        },
+        {
+          "path": "run_closed_loop.py",
+          "sha256": "351bb251112eb0d3d3a73a111b79d5d7dffa10a5a0d4b01ef5bc05638810027d",
+          "size": 9660
+        },
+        {
+          "path": "RUN_KEEP_OPEN.cmd",
+          "sha256": "23238b1356cd7f85725195db42b2c1b0ea5d22f4fe84b6c6b1c4e69090adf2e0",
+          "size": 71
+        },
+        {
+          "path": "run_local_demo.bat",
+          "sha256": "7e66b7f19332a5bfef92c7fb8fbdbb567b5f29e53ecd56d363eda02a338a2da9",
+          "size": 122
+        },
+        {
+          "path": "run_local_demo.ps1",
+          "sha256": "cf66ec7e6121514fad9ae79f7b53980df3b893d85193d436c35d1f43e9073a8b",
+          "size": 2916
+        },
+        {
+          "path": "setup_env.ps1",
+          "sha256": "34f4df77db0376ca2634f4ef00a9d0b837d10a4d0a8a03b0e13d7f8fea341b48",
+          "size": 5291
+        },
+        {
+          "path": "start_full.ps1",
+          "sha256": "53d6a561b7872ce045418d5561136db7ea901511298b13a78fbbdecd6f46dad2",
+          "size": 3602
+        },
+        {
+          "path": "START_LOCAL_DEMO.cmd",
+          "sha256": "52f49b3fb71b496329455bbe363dd5cf1d94999bc2055f09c07e0fcad1e0a0b5",
+          "size": 1069
+        },
+        {
+          "path": "start_wecom_ai_bot_dry_run.bat",
+          "sha256": "089f446a8554b2d60b4126230bf41c5a37364598a97b61cdb6d588f62d5bc094",
+          "size": 429
+        },
+        {
+          "path": "start_wecom_ai_bot_dry_run.ps1",
+          "sha256": "9528451780101a3e92032dc49fa355a8d8c6d142d49c21f808e48052dd6885aa",
+          "size": 7368
+        },
+        {
+          "path": "start_wecom_ai_bot_live.ps1",
+          "sha256": "5c6f8303685981409c12d52e80739dc654dfaa69d0f3560ca974e884ef56676d",
+          "size": 10492
+        },
+        {
+          "path": "step_by_step.ps1",
+          "sha256": "9609d9ad0908ae38db1ab2d951541cc2b8c2a6b33ad473fca7c4e4a7a863eca5",
+          "size": 4934
+        },
+        {
+          "path": "stop_bot.ps1",
+          "sha256": "33de8822aac4fdba82ac53a35c22dc2272d8e4ad231daf0321051fbca3129116",
+          "size": 2296
+        },
+        {
+          "path": "validate_package.bat",
+          "sha256": "e71c0da8caf283cbe15d6935d01c775ab48a01f280c16c1d1eb0c95eb1d433a2",
+          "size": 124
+        },
+        {
+          "path": "validate_package.ps1",
+          "sha256": "4de25ed528d9a50509b1194b8bbcf2c72f54860b9eb23d862eba61c2348b8ed0",
+          "size": 858
+        },
+        {
+          "path": "verify_env.ps1",
+          "sha256": "f2046ca33c34f0cb9f573dc43c18eae187973e174d1899d2be0f1b4f22fdb942",
+          "size": 6254
+        },
+        {
+          "path": "启动后验证清单.md",
+          "sha256": "961aae311ce275c138b2b0a42924ebad220de1922bd20ca1535ef7b1ea6e7950",
+          "size": 4145
+        },
+        {
+          "path": "故障信息模板.txt",
+          "sha256": "d5e2b09938b2363f17c101c67369ecc5ec91fa37dc51044f871dea14a973b55f",
+          "size": 1809
+        },
+        {
+          "path": ".agents/skills/fault-closed-loop/SKILL.md",
+          "sha256": "fd3167b08f34223b72cc2f52d5b9d37765c1d6c021a0df95b6b07e2379b6be96",
+          "size": 948
+        },
+        {
+          "path": ".agents/skills/fault-closed-loop/agents/openai.yaml",
+          "sha256": "3e34e48764f82140e75f62fdcbd9e4928cb73fa58b17fcf91ce97cc02312a345",
+          "size": 254
+        },
+        {
+          "path": "config/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "docs/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "docs/CHANGELOG.md",
+          "sha256": "07ba7c6f8f68fc9459c127863029a4eacd2e80f62b948e0fe23e44979afdf47c",
+          "size": 5094
+        },
+        {
+          "path": "docs/DIRECTORY_MAP.md",
+          "sha256": "f02ca24a7178da3f82b42e35cb203fb5ddc3312d717b007737f4353b9938ef71",
+          "size": 1884
+        },
+        {
+          "path": "docs/HANDOVER_OPERATIONS.md",
+          "sha256": "571685fd7177f2bdcf5722137939d5e5d913f5f18a92087d62e5528bcb23f680",
+          "size": 11951
+        },
+        {
+          "path": "docs/LOCAL_RUN.md",
+          "sha256": "d84e6f4a55c2df364cd9903d47f4e4b814087ed65d20ce6a08c81b1c9ac19217",
+          "size": 8492
+        },
+        {
+          "path": "docs/OUTPUT_POLICY.md",
+          "sha256": "e90d5ea8677c64b6e96412890075ff82ac5cc120671346adb72d9984743b510d",
+          "size": 1712
+        },
+        {
+          "path": "docs/TRANSITION_PLAN.md",
+          "sha256": "9b75a8f30c74ef79d417c79608de534050e3d8778ea57eba0b74698af1ccb865",
+          "size": 2419
+        },
+        {
+          "path": "docs/WECOM_BOT.md",
+          "sha256": "df5474945f213e0beacba7d137d22391e78a2b8ba3bdac0596f6b470b89d7f18",
+          "size": 2957
+        },
+        {
+          "path": "docs/agent-workflows/delivery.md",
+          "sha256": "05064e9ce715b0760816b46c933a5533945e425ccf8ca78c223d19fba3094332",
+          "size": 2537
+        },
+        {
+          "path": "docs/agent-workflows/execution.md",
+          "sha256": "30e690dfbfd041450a8af89284d73aca20077e56517c41580c5bd536d8570c08",
+          "size": 3179
+        },
+        {
+          "path": "scripts/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "scripts/feishu_attach_manuals.py",
+          "sha256": "c14913ab10aae8294ed666473641f6e502a3730174090c3dc02ad6a98ee5a35d",
+          "size": 4641
+        },
+        {
+          "path": "scripts/feishu_discover_fields.py",
+          "sha256": "f0012fecceeaaffec3786575f36c5f1f56b1aa47f3ce8e47cd555e9a6acb4101",
+          "size": 740
+        },
+        {
+          "path": "scripts/feishu_normalize_handlers.py",
+          "sha256": "8a39c13700ccd1537adc058ccd80633579ca870ce82a2f3bc9cdc00e572c8ba1",
+          "size": 6000
+        },
+        {
+          "path": "scripts/feishu_overwrite_from_excel.py",
+          "sha256": "633765d7d1ca47f30c00fa9e2507754e69251d441d4acb1c7937bbd940d447a8",
+          "size": 18144
+        },
+        {
+          "path": "scripts/feishu_readback_sample.py",
+          "sha256": "0dfb0835881dbe121bf772f9857959b8563a75c5aad0d29eff3bf5ccadb17f2a",
+          "size": 1145
+        },
+        {
+          "path": "scripts/post_to_hermes_webhook.py",
+          "sha256": "472722a5fb7d3be23e4d1a9e71f98b8dcee0810852d870d01b725929fa7e1750",
+          "size": 6594
+        },
+        {
+          "path": "scripts/wecom_app_callback.py",
+          "sha256": "6d277cfad0058cd14d166949b794f504a4f2b838888934cec675209facb3e754",
+          "size": 11356
+        },
+        {
+          "path": "scripts/wecom_fault_bot.py",
+          "sha256": "08acfe8fb6d8418e1277dbc071a49fa18565fe8e652056441451601b61cd7a87",
+          "size": 32583
+        },
+        {
+          "path": "src/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/feishu_ledger/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/feishu_ledger/client.py",
+          "sha256": "924b3cc7a9fd68e7f2014323d842866ca7c8ea3e66bee5fe2820f0b46e700dcf",
+          "size": 25775
+        },
+        {
+          "path": "src/feishu_ledger/preview.py",
+          "sha256": "b658cd83e8eac5b65401bbc9f74ba66f1679fd11ccc36b456f1534cd447adf2a",
+          "size": 6525
+        },
+        {
+          "path": "src/field_contracts/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/field_contracts/contract.py",
+          "sha256": "fb10731f7e01e8238b77989f73722e17f3a9641b1390e5c0d94d140a14607da8",
+          "size": 8543
+        },
+        {
+          "path": "src/field_contracts/contracts/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/field_contracts/contracts/FAULT_CLOSED_LOOP_RULES.md",
+          "sha256": "b134fcc807e05e6aac49fa49a614bbbe3b894d42bcdd77fcf30224bc61d263c1",
+          "size": 10623
+        },
+        {
+          "path": "src/field_contracts/contracts/incident_context_schema.json",
+          "sha256": "6eca2ad3be2b7ae11bba57a2fd5dc31fd93073d9aad71647ed704e2e281cafee",
+          "size": 5179
+        },
+        {
+          "path": "src/input_collection/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/input_collection/message_registry.py",
+          "sha256": "71d97df90dffc6f841315e55c91078a48ac2ed298ad80d2e2fbc04435672a1ad",
+          "size": 10624
+        },
+        {
+          "path": "src/input_collection/ocr.py",
+          "sha256": "8eb491889981e1855b4a88c339cd94464e672df6af03791ecce3fa7e54813ff5",
+          "size": 2272
+        },
+        {
+          "path": "src/mail_sender/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/mail_sender/preview.py",
+          "sha256": "d1cdc9390b8fd4fd51f5d71236b4460c16d185b838299766d83fe5ce81099348",
+          "size": 5966
+        },
+        {
+          "path": "src/mail_sender/smtp_sender.py",
+          "sha256": "d919bc15f48197ee233edc7a71fd4f10c2d3bd2b907d427daf137fd2c486c2cd",
+          "size": 4740
+        },
+        {
+          "path": "src/manuals_review/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/manuals_review/preview.py",
+          "sha256": "f792dce124241b5bdd8290806a1ed4206c54eba1491799d4b18d293e8fab180a",
+          "size": 11771
+        },
+        {
+          "path": "src/offline_ledger/workbook.py",
+          "sha256": "a2415176813ae1c3022c18c1c14f0e622fc5ad427f8dfd2499e1b1b1815c48eb",
+          "size": 11475
+        },
+        {
+          "path": "src/offline_ledger/__init__.py",
+          "sha256": "2fb40588c21fc7b55cde4f5e13ae817611c3b9772075c50b7e08fde29ea66be9",
+          "size": 48
+        },
+        {
+          "path": "src/orchestrator/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/orchestrator/pipeline.py",
+          "sha256": "1d774b680eb5eba019be1d099314de50fe8d4b70251477e8590feb9b32972995",
+          "size": 108472
+        },
+        {
+          "path": "src/orchestrator/__init__.py",
+          "sha256": "f2b780e094e76ec97cecf017c54c897381a84926727385195fca77a12e9b35e3",
+          "size": 70
+        },
+        {
+          "path": "src/report_generation/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "src/report_generation/docx_writer.py",
+          "sha256": "363e699807fcddefbd8dd6f5c065f11413b4fa6194df912322c632e01b5e049a",
+          "size": 44600
+        },
+        {
+          "path": "tests/.gitkeep",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "path": "tests/test_auto_live_gate.py",
+          "sha256": "6bd35d24b4755485226a2ce4714df3ba542c877c4b39693fd4204e64785d951a",
+          "size": 5661
+        },
+        {
+          "path": "tests/test_case_id_path_guard.py",
+          "sha256": "238e60f4dd086e68d17c84523e30f08fddf3aab35bd60bdeb7d1dd31aec2af0f",
+          "size": 1892
+        },
+        {
+          "path": "tests/test_delivery_dependencies.py",
+          "sha256": "d78fed7afe08f562eb5f8928d25fcd7b9e2325e35a3c80e82e73278a87efbecb",
+          "size": 1330
+        },
+        {
+          "path": "tests/test_delivery_scripts.py",
+          "sha256": "5f5dec9d6684c86f04b969e1f3fa1dd4c89812ce9a15dfcc8403bfd6f38dc291",
+          "size": 16593
+        },
+        {
+          "path": "tests/test_feishu_dedupe_fail_closed.py",
+          "sha256": "8135debce4c75def598554268104eadf1144d75d86cbf10e81e21c2d32db1ff6",
+          "size": 8417
+        },
+        {
+          "path": "tests/test_handler_history_live_boundary.py",
+          "sha256": "9343d558d60ff3eb67f7734dcce70b5d18c8a3a4a02f1050cbe207ce8472de47",
+          "size": 2160
+        },
+        {
+          "path": "tests/test_mail_status_backfill_guard.py",
+          "sha256": "1f21f63804bf085d4954b8524dfe49b5072d9c497794441549b01356114626f0",
+          "size": 972
+        },
+        {
+          "path": "tests/test_message_registry.py",
+          "sha256": "134426e7f0f8e72f792f735e0f97fe56f4f76f38b1311c818bd00d4f1ce68ef3",
+          "size": 6280
+        },
+        {
+          "path": "tests/test_minimal_closed_loop.py",
+          "sha256": "d03728b39b187496bcfd56aa7daafdef1d269e46eaaa0b63174675bdd58530ea",
+          "size": 118338
+        },
+        {
+          "path": "tests/test_offline_master_root.py",
+          "sha256": "d75bdfc38554199a3edd60b9415679bb638fb4882088a27ba1d08e78ac86d662",
+          "size": 5577
+        },
+        {
+          "path": "tests/test_portable_release_boundaries.py",
+          "sha256": "6affbfd1c77cbf61c4ba7783355a77dc2599903da39c7f69fd67a229d42aef30",
+          "size": 3143
+        },
+        {
+          "path": "tests/test_report_time_evidence.py",
+          "sha256": "dd0000eb6c96bd4971dc95e07b1c2545c3e23c9e19ee43e22e6e2cad0c338758",
+          "size": 1644
+        },
+        {
+          "path": "tests/test_wecom_app_callback.py",
+          "sha256": "91eee93d7f76f5e3f98e90708480f296c448efc2dfd30bddaf34e376bee51640",
+          "size": 1765
+        },
+        {
+          "path": "tests/test_wecom_fault_bot_local_mock.py",
+          "sha256": "c0c189f4eb47e0ec1023b5e4aee0e29adf4448533bd75182421a0ed0e36d43ba",
+          "size": 23006
+        },
+        {
+          "path": "tests/__init__.py",
+          "sha256": "bd8612b85819b09a4c0327443cd5e1389148a486ebe4a72826a625d66abe8524",
+          "size": 191
+        }
+      ],
+      "excluded_to_private_recovery": [
+        "config/private/feishu.json",
+        "config/private/feishu.template.json",
+        "config/private/gitee_known_hosts",
+        "config/private/README.md",
+        "config/private/wecom_bot.dpapi.json",
+        "config/private/wecom_bot.env.template",
+        "src/mail_sender/contacts.py",
+        "tests/test_portable_release_private_config.py"
+      ]
+    }
+  ],
+  "recovery_repository": "GZ-dy/gaozhe-project-private-backups",
+  "latest_source_status": "LOCAL_SNAPSHOT",
+  "source_files_sanitized_for_git_originals_in_private_recovery": [
+    {
+      "path": "workspace/docs/LOCAL_RUN.md",
+      "original_sha256": "d84e6f4a55c2df364cd9903d47f4e4b814087ed65d20ce6a08c81b1c9ac19217",
+      "reason": [
+        "credential-assignment"
+      ],
+      "original_preserved_in": "private recovery archive",
+      "git_copy_sha256": "1eca7ed4e8da7dbfdca9a4bb1f2ac9abd2e2118b9ab7d30bf96e03040ad519c2"
+    }
+  ]
+}

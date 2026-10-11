@@ -1,0 +1,4 @@
+interface:
+  display_name: "故障闭环交付"
+  short_description: "整理故障材料并核验报告、台账、邮件预览以及便携交付结果"
+  default_prompt: "使用 $fault-closed-loop 根据本次故障材料生成并核验离线产物。"

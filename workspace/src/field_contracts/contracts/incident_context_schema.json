@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Fault Closed Loop Incident Context V1",
+  "type": "object",
+  "required": ["meta", "input", "incident", "impact", "diagnosis", "handling", "review", "evidence"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "fact_safety_version", "case_id", "created_at", "status"],
+      "properties": {
+        "schema_version": { "type": "string", "const": "1.0" },
+        "fact_safety_version": { "type": "string", "const": "2" },
+        "case_id": { "type": "string" },
+        "created_at": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "validated", "need_review"] },
+        "source_event": {
+          "type": "object",
+          "properties": {
+            "channel": { "type": "string" },
+            "event_key": { "type": "string" },
+            "message_id": { "type": "string" },
+            "bot_id": { "type": "string" },
+            "chat_id": { "type": "string" },
+            "chat_type": { "type": "string" },
+            "conversation_key": { "type": "string" },
+            "sender_namespace": { "type": "string" },
+            "sender_id": { "type": "string" },
+            "sender_key": { "type": "string" },
+            "received_at": { "type": "string" },
+            "quote_message_id": { "type": "string" },
+            "quote_text": { "type": "string" },
+            "association": { "type": "string" }
+          }
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": ["text", "screenshots", "logs", "attachments"],
+      "properties": {
+        "text": { "type": "string" },
+        "original_text": { "type": "string" },
+        "screenshots": { "type": "array", "items": { "type": "object" } },
+        "screenshot_texts": { "type": "array", "items": { "type": "object" } },
+        "logs": { "type": "array", "items": { "type": "object" } },
+        "log_texts": { "type": "array", "items": { "type": "object" } },
+        "attachments": { "type": "array", "items": { "type": "object" } },
+        "attachment_texts": { "type": "array", "items": { "type": "object" } },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["event_key", "message_id", "conversation_key", "sender_key", "text"],
+            "properties": {
+              "event_key": { "type": "string" },
+              "message_id": { "type": "string" },
+              "conversation_key": { "type": "string" },
+              "sender_key": { "type": "string" },
+              "text": { "type": "string" },
+              "raw_text": { "type": "string" },
+              "received_at": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "incident": {
+      "type": "object",
+      "required": ["system_name", "fault_title", "occurred_at", "recovered_at", "duration_minutes", "discovery_source"],
+      "properties": {
+        "system_name": { "type": "string" },
+        "fault_title": { "type": "string" },
+        "occurred_at": { "type": "string" },
+        "recovered_at": { "type": "string" },
+        "duration_minutes": { "type": ["integer", "string"] },
+        "discovery_source": { "type": "string" }
+      }
+    },
+    "impact": {
+      "type": "object",
+      "required": ["impact_scope", "affected_business", "impact_description"],
+      "properties": {
+        "impact_scope": { "type": "string" },
+        "affected_business": { "type": "string" },
+        "impact_description": { "type": "string" }
+      }
+    },
+    "diagnosis": {
+      "type": "object",
+      "required": ["fault_description", "fault_cause", "boundary_tool"],
+      "properties": {
+        "fault_description": { "type": "string" },
+        "fault_cause": { "type": "string" },
+        "boundary_tool": { "type": "string" }
+      }
+    },
+    "handling": {
+      "type": "object",
+      "required": ["owner", "handling_group", "process_records", "solution", "closure_info", "followup_measures"],
+      "properties": {
+        "owner": { "type": "string" },
+        "handling_group": { "type": "string" },
+        "process_records": { "type": "array", "items": { "type": "string" } },
+        "solution": { "type": "string" },
+        "closure_info": { "type": "string" },
+        "followup_measures": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["review_summary"],
+      "properties": {
+        "review_summary": { "type": "string" }
+      }
+    },
+    "suggestions": {
+      "type": "object",
+      "description": "Derived candidates for human review; never formal facts by themselves."
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["source_refs", "missing_fields"],
+      "properties": {
+        "source_refs": { "type": "array", "items": { "type": "object" } },
+        "missing_fields": { "type": "array", "items": { "type": "string" } },
+        "missing_field_prompts": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}
